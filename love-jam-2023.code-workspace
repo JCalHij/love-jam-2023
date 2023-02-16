@@ -6,7 +6,7 @@
 		}
 	],
 	"settings": {
-		"Lua.runtime.version": "LuaJIT"
+		"Lua.runtime.version": "LuaJIT",
 	},
 	"launch": {
 		"version": "0.2.0",
@@ -26,6 +26,12 @@
 			],
 			"cwd": "${workspaceFolder}"
 		  }
+		]
+	},
+	"extensions": {
+		"recommendations": [
+			"sumneko.lua",
+			"tomblind.local-lua-debugger-vscode"
 		]
 	}
 }
