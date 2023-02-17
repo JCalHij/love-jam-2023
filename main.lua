@@ -1,3 +1,4 @@
+-- https://stackoverflow.com/questions/65066037/how-to-debug-lua-love2d-with-vscode
 if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
     require("lldebugger").start()
 end
@@ -5,14 +6,19 @@ end
 
 function love.load(args, unfiltered_args)
     require "core"
+	require "game"
+
+	g_GameApp = GameApp()
 end
 
 
 function love.update(dt)
+	g_GameApp:update(dt)
 end
 
 
 function love.draw()
+	g_GameApp:render()
 end
 
 
