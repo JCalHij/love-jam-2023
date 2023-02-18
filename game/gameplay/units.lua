@@ -215,6 +215,37 @@ end
 
 
 
+---@class MagicShield: Unit
+---@operator call(): MagicShield
+MagicShield = Unit:extend()
+
+
+---@param position Vec2
+function MagicShield:new(position)
+    ---@type UnitDef
+    local BaseMagicShieldDef = {
+        position = position,
+        hit_points = 10,
+        move_speed = 0,
+        attack_damage = 0,
+        attack_speed = 0.0,
+        collider_radius = 50,
+    }
+    MagicShield.super.new(self, BaseMagicShieldDef)
+end
+
+function MagicShield:render()
+    SetDrawColor({1, 1, 0, 1})
+    love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
+    SetDrawColor({1, 1, 01, 1})
+end
+
+
+
+---------------------------------------------------------------------------------
+
+
+
 ---@class NormalZombie: Unit
 ---@operator call(): NormalZombie
 NormalZombie = Unit:extend()
