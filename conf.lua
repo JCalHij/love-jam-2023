@@ -5,7 +5,7 @@ function love.conf(t)
     t.window.width = 1280
     t.window.height = 720
     t.window.icon = nil                 -- Filepath to an image to use as the window's icon (string)
-    t.console = false                   -- Attach a console (boolean, Windows only)
+    t.console = true                    -- Attach a console (boolean, Windows only)
     t.window.resizable = true           -- Let the window be user-resizable (boolean)
     t.window.minwidth = 512             -- Minimum window width if the window is resizable (number)
     t.window.minheight = 360            -- Minimum window height if the window is resizable (number)

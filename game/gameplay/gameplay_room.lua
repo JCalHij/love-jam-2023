@@ -8,10 +8,11 @@ function GameplayRoom:new(app)
     self.app = app
     self.objects = {}  ---@type table
     self.units = {}  ---@type Unit[]
+    self.effects = {}  ---@type Effect[]
 
     self.player = PlayerController(self)
 
-    self.knight = nil
+    self.knight = nil  ---@type Knight
 end
 
 
@@ -36,12 +37,35 @@ function GameplayRoom:update(dt)
     for _, unit in ipairs(self.units) do
         unit:update(dt)
     end
+
+    for _, effect in ipairs(self.effects) do
+        effect:update(dt)
+    end
+
+    for i=#self.units, 1, -1 do
+        local unit = self.units[i]
+        if not unit.alive then
+            unit:destroy()
+            table.remove(self.units, i)            
+        end
+    end
+
+    for i=#self.effects, 1, -1 do
+        local effect = self.effects[i]
+        if not effect.alive then
+            effect:destroy()
+            table.remove(self.effects, i)            
+        end
+    end
 end
 
 
 function GameplayRoom:render()
     for _, unit in ipairs(self.units) do
         unit:render()
+    end
+    for _, effect in ipairs(self.effects) do
+        effect:render()
     end
 end
 
@@ -53,4 +77,23 @@ function GameplayRoom:spawn_unit(unit_class, position)
     local unit = unit_class(random_position)
     table.insert(self.units, unit)
     return unit
+end
+
+
+---@param effect Effect
+function GameplayRoom:add_effect(effect)
+    table.insert(self.effects, effect)
+end
+
+
+---@param fn fun(unit: Unit): boolean
+---@return Unit[]
+function GameplayRoom:filter_units(fn)
+    local units = {}
+    for _, unit in ipairs(self.units) do
+        if fn(unit) then
+            table.insert(units, unit)
+        end
+    end
+    return units
 end
