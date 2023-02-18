@@ -1,30 +1,18 @@
----@class PlayerDef
----@field pos? Vec2
----@field room GameplayRoom
+---@class PlayerController: Object
+---@operator call(): PlayerController
+PlayerController = Object:extend()
 
 
----@class Player: Object
-Player = Object:extend()
-
-
----@param playerDef PlayerDef
-function Player:new(playerDef)
-    self.room = playerDef.room
-    self.pos = playerDef.pos or Vector2(0, 0)
-    self.alive = true
+---@param room GameplayRoom
+function PlayerController:new(room)
+    self.room = room
 end
 
 
-function Player:update(dt)
+function PlayerController:update(dt)
 end
 
 
-function Player:render()
-    love.graphics.circle("line", self.pos.x, self.pos.y, 5)
-end
-
-
-function Player:destroy()
-    self.pos = nil
+function PlayerController:destroy()
     self.room = nil
 end
