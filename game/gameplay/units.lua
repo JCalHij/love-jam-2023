@@ -169,10 +169,13 @@ end
 
 ---@param targets Unit[]
 function Knight:set_targets(targets)
-    printf("Knight has now been assigned %d targets", #targets)
-    --//TODO[javi]: What happens when we are already targeting others? And what about their trackers?
-    self.targets = targets
-    self.state = KnightMovingState(self)
+    if self.state:class() == KnightIdleState then
+        printf("Knight has now been assigned %d targets", #targets)
+        self.targets = targets
+        self.state = KnightMovingState(self)
+        return true
+    end
+    return false
 end
 
 

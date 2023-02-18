@@ -58,7 +58,12 @@ function OrderingKnightState:update(dt)
         -- Commit order to knight unit (only if targets locked) and back to idle
         print("Commiting order, going to IdleState")
         if #self.targets > 0 then
-            self.controller.room.knight:set_targets(self.targets)
+            local targets_accepted = self.controller.room.knight:set_targets(self.targets)
+            if not targets_accepted then
+                for _, tracker in ipairs(self.trackers) do
+                    tracker:destroy()
+                end
+            end
         end
         self.controller.state = IdleState(self.controller)
         self:destroy()
