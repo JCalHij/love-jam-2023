@@ -1,3 +1,11 @@
+---@enum EMouseButton
+EMouseButton = {
+    Left = 1,
+    Right = 2,
+    Center = 3,
+}
+
+
 --
 -- Module State
 --
@@ -344,7 +352,7 @@ end
 --[[
 Returns whether the mouse button has been pressed in the current frame
 ]]
----@param button number
+---@param button EMouseButton
 ---@return boolean
 function input_is_mouse_pressed(button)
     return MousePressed[button]
@@ -353,7 +361,7 @@ end
 --[[
 Returns whether the mouse button is being pressed in the current frame
 ]]
----@param button number
+---@param button EMouseButton
 ---@return boolean
 function input_is_mouse_held(button)
     return MouseHeld[button]
@@ -362,7 +370,7 @@ end
 --[[
 Returns whether the mouse button has been released in the current frame
 ]]
----@param button number
+---@param button EMouseButton
 ---@return boolean
 function input_is_mouse_released(button)
     return MouseReleased[button]
