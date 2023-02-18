@@ -51,9 +51,11 @@ function OrderingKnightState:update(dt)
         self.trackers = nil
         self.controller.state = IdleState(self.controller)
     elseif input_is_mouse_released(EMouseButton.Left) then
-        -- Commit order to knight unit and back to idle
+        -- Commit order to knight unit (only if targets locked) and back to idle
         print("Commiting order, going to IdleState")
-        self.controller.room.knight:set_targets(self.targets)
+        if #self.targets > 0 then
+            self.controller.room.knight:set_targets(self.targets)
+        end
         self.targets = nil
         self.trackers = nil
         self.controller.state = IdleState(self.controller)
