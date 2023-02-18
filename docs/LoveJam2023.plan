@@ -4,9 +4,9 @@
   "BoardIndex": 0,
   "BoardCount": 1,
   "AutoSave": false,
-  "Pan.X": -228.6753692626953,
-  "Pan.Y": -477.1112060546875,
-  "ZoomLevel": 5,
+  "Pan.X": -481.00811767578125,
+  "Pan.Y": -529.923095703125,
+  "ZoomLevel": 4,
   "TaskTransparency": 5,
   "OutlineTasks": true,
   "BracketSubtasks": true,
@@ -95,7 +95,7 @@
       "BoardIndex": 0,
       "Position.X": 144,
       "Position.Y": 352,
-      "Checkbox.Checked": false,
+      "Checkbox.Checked": true,
       "Progression.Current": 0,
       "Progression.Max": 0,
       "Description": "Player attacking an enemy",
@@ -107,7 +107,7 @@
       "BoardIndex": 0,
       "Position.X": 144,
       "Position.Y": 368,
-      "Checkbox.Checked": false,
+      "Checkbox.Checked": true,
       "Progression.Current": 0,
       "Progression.Max": 0,
       "Description": "Player chain attack",
@@ -118,7 +118,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 144,
-      "Position.Y": 384,
+      "Position.Y": 416,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -130,7 +130,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 144,
-      "Position.Y": 400,
+      "Position.Y": 432,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -142,7 +142,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 144,
-      "Position.Y": 416,
+      "Position.Y": 384,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -154,7 +154,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 144,
-      "Position.Y": 432,
+      "Position.Y": 400,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -991,6 +991,66 @@
       "Selected": false,
       "TaskType.CurrentChoice": 0,
       "CreationTime": "Feb 17 2023 09:09:34"
+    }, 
+    {
+      "BoardIndex": 0,
+      "Position.X": 512,
+      "Position.Y": 624,
+      "Checkbox.Checked": false,
+      "Progression.Current": 0,
+      "Progression.Max": 0,
+      "Description": "Game balancing",
+      "Selected": false,
+      "TaskType.CurrentChoice": 0,
+      "CreationTime": "Feb 18 2023 12:02:53"
+    }, 
+    {
+      "BoardIndex": 0,
+      "Position.X": 528,
+      "Position.Y": 640,
+      "Checkbox.Checked": false,
+      "Progression.Current": 0,
+      "Progression.Max": 0,
+      "Description": "Enemy waves",
+      "Selected": false,
+      "TaskType.CurrentChoice": 0,
+      "CreationTime": "Feb 18 2023 12:03:11"
+    }, 
+    {
+      "BoardIndex": 0,
+      "Position.X": 528,
+      "Position.Y": 656,
+      "Checkbox.Checked": false,
+      "Progression.Current": 0,
+      "Progression.Max": 0,
+      "Description": "Unit stats",
+      "Selected": false,
+      "TaskType.CurrentChoice": 0,
+      "CreationTime": "Feb 18 2023 12:03:25"
+    }, 
+    {
+      "BoardIndex": 0,
+      "Position.X": 528,
+      "Position.Y": 672,
+      "Checkbox.Checked": false,
+      "Progression.Current": 0,
+      "Progression.Max": 0,
+      "Description": "Points",
+      "Selected": false,
+      "TaskType.CurrentChoice": 0,
+      "CreationTime": "Feb 18 2023 12:03:33"
+    }, 
+    {
+      "BoardIndex": 0,
+      "Position.X": 528,
+      "Position.Y": 688,
+      "Checkbox.Checked": false,
+      "Progression.Current": 0,
+      "Progression.Max": 0,
+      "Description": "Abilities",
+      "Selected": false,
+      "TaskType.CurrentChoice": 0,
+      "CreationTime": "Feb 18 2023 12:03:40"
     }
   ]
 }
