@@ -36,19 +36,26 @@ end
 ---@param controller PlayerController
 function OrderingKnightState:new(controller)
     OrderingKnightState.super.new(self, controller)
-    self.targets = {}
+    self.targets = {}  ---@type Unit[]
+    self.trackers = {}  ---@type TrackerEffect[]
 end
 
 function OrderingKnightState:update(dt)
     if input_is_key_pressed("escape") then
         -- Cancel ordering, back to idle
         print("Cancelling order, going to IdleState")
+        for _, tracker in ipairs(self.trackers) do
+            tracker:destroy()
+        end
+        self.targets = nil
+        self.trackers = nil
         self.controller.state = IdleState(self.controller)
     elseif input_is_mouse_released(EMouseButton.Left) then
         -- Commit order to knight unit and back to idle
         print("Commiting order, going to IdleState")
         self.controller.room.knight:set_targets(self.targets)
         self.targets = nil
+        self.trackers = nil
         self.controller.state = IdleState(self.controller)
     else
         -- Keep tracking enemy units
@@ -76,10 +83,14 @@ function OrderingKnightState:update(dt)
             return true
         end
         local filtered_units = self.controller.room:filter_units(filter)
-        -- Add filtered units to the list, if any
+        -- Add filtered units to the list, if any. Also, create trackers for each one
+        -- and cache them
         if #filtered_units > 0 then
             for _, unit in ipairs(filtered_units) do
                 table.insert(self.targets, unit)
+                local tracker_effect = TrackerEffect(unit)
+                self.controller.room:add_effect(tracker_effect)
+                table.insert(self.trackers, tracker_effect)
             end
         end
     end
