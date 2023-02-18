@@ -184,6 +184,37 @@ end
 
 
 
+---@class Princess: Unit
+---@operator call(): Princess
+Princess = Unit:extend()
+
+
+---@param position Vec2
+function Princess:new(position)
+    ---@type UnitDef
+    local BasePrincessDef = {
+        position = position,
+        hit_points = 1,
+        move_speed = 0,
+        attack_damage = 0,
+        attack_speed = 0.0,
+        collider_radius = 5,
+    }
+    Princess.super.new(self, BasePrincessDef)
+end
+
+function Princess:render()
+    SetDrawColor({1, 0, 1, 1})
+    love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
+    SetDrawColor({1, 1, 01, 1})
+end
+
+
+
+---------------------------------------------------------------------------------
+
+
+
 ---@class NormalZombie: Unit
 ---@operator call(): NormalZombie
 NormalZombie = Unit:extend()

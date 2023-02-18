@@ -24,6 +24,7 @@ function GameplayRoom:init()
     self.units = {}
 
     self.knight = self:spawn_unit(Knight, Vector2(100, 100))
+    self.princess = self:spawn_unit(Princess, Vector2(VirtualWidth/2, VirtualHeight/2))
 
     for i=1,5 do
         self:spawn_unit(NormalZombie)
