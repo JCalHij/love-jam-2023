@@ -22,6 +22,7 @@ function GameplayRoom:init()
     end
     self.units = {}
 
+    ---@type Knight
     self.knight = self:spawn_unit(Knight, Vector2(100, 100))
 
     for i=1,5 do
@@ -53,4 +54,17 @@ function GameplayRoom:spawn_unit(unit_class, position)
     local unit = unit_class(random_position)
     table.insert(self.units, unit)
     return unit
+end
+
+
+---@param fn fun(unit: Unit): boolean
+---@return Unit[]
+function GameplayRoom:filter_units(fn)
+    local units = {}
+    for _, unit in ipairs(self.units) do
+        if fn(unit) then
+            table.insert(units, unit)
+        end
+    end
+    return units
 end
