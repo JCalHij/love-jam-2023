@@ -16,6 +16,7 @@ function Unit:new(unitDef)
     self.hp = unitDef.hit_points
     self.attack_damage = unitDef.attack_damage
     self.move_speed = unitDef.move_speed
+    self.alive = true
 end
 function Unit:update(dt) end
 function Unit:render() end
