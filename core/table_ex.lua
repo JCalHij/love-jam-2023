@@ -144,10 +144,28 @@ or `nil` otherwise.
 ---@param t table
 ---@param e V
 ---@return K?
-function table.find(t, e)
+function table.kfind(t, e)
     for k, v in pairs(t) do
         if v == e then
             return k
+        end
+    end
+end
+
+
+--[[
+Tries to find element `e` on table `t`.
+Returns the key to access the given element, if found,
+or `nil` otherwise.
+]]
+---@generic V
+---@param t table
+---@param e V
+---@return integer?
+function table.ifind(t, e)
+    for i, v in ipairs(t) do
+        if v == e then
+            return i
         end
     end
 end
