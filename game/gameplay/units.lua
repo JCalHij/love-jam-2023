@@ -16,12 +16,19 @@ function Unit:new(unitDef)
     self.pos = unitDef.position
     self.hp = unitDef.hit_points
     self.attack_damage = unitDef.attack_damage
+    self.attack_speed = unitDef.attack_speed
     self.move_speed = unitDef.move_speed
     self.alive = true
     self.collider_radius = unitDef.collider_radius
 end
 function Unit:update(dt) end
 function Unit:render() end
+function Unit:take_damage(damage)
+    self.hp = self.hp - damage
+    if self.hp <= 0 then
+        self.alive = false
+    end
+end
 
 
 
@@ -76,6 +83,7 @@ function KnightMovingState:update(dt)
     local sum_colliders = target.collider_radius + self.knight.collider_radius
     local move_direction = target.pos - self.knight.pos
     if move_direction:len() <= sum_colliders then
+        printf("Knight collided with target. Switching to KnightAttackingState")
         self.knight.state = KnightAttackingState(self.knight)
         self:destroy()
         return
@@ -87,6 +95,41 @@ function KnightMovingState:update(dt)
 end
 
 function KnightMovingState:destroy()
+    self.knight = nil
+end
+
+
+
+---@param knight Knight
+function KnightAttackingState:new(knight)
+    self.knight = knight
+    self.attack_timer = knight.attack_speed
+end
+
+function KnightAttackingState:update(dt)
+    self.attack_timer = self.attack_timer - dt
+    if self.attack_timer <= 0 then
+        printf("Knight attacking!")
+        -- Reset timer
+        self.attack_timer = self.attack_timer + self.knight.attack_speed
+        -- Attack
+        local target = self.knight.targets[1]
+        target:take_damage(self.knight.attack_damage)
+        if not target.alive then
+            printf("Target is dead!")
+            -- Remove target from list and go to the next one
+            table.remove(self.knight.targets, 1)
+            if #self.knight.targets > 0 then
+                self.knight.state = KnightMovingState(self.knight)
+            else
+                self.knight.state = KnightIdleState(self.knight)
+            end
+            self:destroy()
+        end
+    end
+end
+
+function KnightAttackingState:destroy()
     self.knight = nil
 end
 
