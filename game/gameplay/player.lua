@@ -28,7 +28,12 @@ function IdleState:update(dt)
     if input_is_mouse_pressed(EMouseButton.Left) then
         print("Going to OrderingKnightState")
         self.controller.state = OrderingKnightState(self.controller)
+        self:destroy()
     end
+end
+
+function IdleState:destroy()
+    self.controller = nil
 end
 
 
@@ -47,18 +52,16 @@ function OrderingKnightState:update(dt)
         for _, tracker in ipairs(self.trackers) do
             tracker:destroy()
         end
-        self.targets = nil
-        self.trackers = nil
         self.controller.state = IdleState(self.controller)
+        self:destroy()
     elseif input_is_mouse_released(EMouseButton.Left) then
         -- Commit order to knight unit (only if targets locked) and back to idle
         print("Commiting order, going to IdleState")
         if #self.targets > 0 then
             self.controller.room.knight:set_targets(self.targets)
         end
-        self.targets = nil
-        self.trackers = nil
         self.controller.state = IdleState(self.controller)
+        self:destroy()
     else
         -- Keep tracking enemy units
         -- Get enemy units under mouse
@@ -96,6 +99,12 @@ function OrderingKnightState:update(dt)
             end
         end
     end
+end
+
+function OrderingKnightState:destroy()
+    self.controller = nil
+    self.targets = nil
+    self.trackers = nil
 end
 
 
