@@ -53,7 +53,7 @@ function OrderingKnightState:update(dt)
     else
         -- Keep tracking enemy units
         -- Get enemy units under mouse
-        local mouse_pos = input_mouse_position()
+        local mouse_pos = screen_to_canvas(input_mouse_position())
         ---@param unit Unit
         local filter = function(unit)
             -- The unit class needs to be one of the following
@@ -99,7 +99,7 @@ PlayerController = Object:extend()
 ---@param room GameplayRoom
 function PlayerController:new(room)
     self.room = room
-    self.state = IdleState()  ---@type PlayerControllerState
+    self.state = IdleState(self)  ---@type PlayerControllerState
 end
 
 
