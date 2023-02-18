@@ -12,7 +12,7 @@ Unit = Object:extend()
 
 ---@param unitDef UnitDef
 function Unit:new(unitDef)
-    self.pos = unitDef.position:clone()
+    self.pos = unitDef.position
     self.hp = unitDef.hit_points
     self.attack_damage = unitDef.attack_damage
     self.move_speed = unitDef.move_speed
@@ -48,6 +48,11 @@ function Knight:render()
     SetDrawColor({0, 1, 0, 1})
     love.graphics.circle("line", self.pos.x, self.pos.y, 5)
     SetDrawColor({1, 1, 01, 1})
+end
+
+---@param targets Unit[]
+function Knight:set_targets(targets)
+    printf("Knight has now been assigned %d targets", #targets)
 end
 
 
