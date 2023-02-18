@@ -8,6 +8,8 @@ function love.load(args, unfiltered_args)
     require "core"
 	require "game"
 
+	input_init()
+
 	-- Window
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	WindowWidth, WindowHeight = love.window.getMode()
