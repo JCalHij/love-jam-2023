@@ -103,7 +103,7 @@ end
 ---@param knight Knight
 function KnightAttackingState:new(knight)
     self.knight = knight
-    self.attack_timer = knight.attack_speed
+    self.attack_timer = 0
 end
 
 function KnightAttackingState:update(dt)
