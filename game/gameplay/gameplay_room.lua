@@ -1,3 +1,13 @@
+---@type UnitDef
+local KnightDef = {
+    position = Vector2(50, 50),
+    hit_points = 1,
+    attack_damage = 1,
+    move_speed = 20,
+}
+
+
+
 ---@class GameplayRoom: Object
 ---@operator call(): GameplayRoom
 GameplayRoom = Object:extend()
@@ -7,37 +17,31 @@ GameplayRoom = Object:extend()
 function GameplayRoom:new(app)
     self.app = app
     self.objects = {}  ---@type table
+    self.units = {}  ---@type Unit[]
 end
 
 
 function GameplayRoom:init()
-    -- Clear objects and add player
-    for _, object in ipairs(self.objects) do
-        object:destroy()
+    -- Clear units
+    for _, unit in ipairs(self.units) do
+        unit:destroy()
     end
 
-    self.objects = {
-        Player({ pos = Vector2(50, 50) }),
+    self.units = {
+        Knight(KnightDef),
     }
 end
 
 
 function GameplayRoom:update(dt)
-    for _, object in ipairs(self.objects) do
-        object:update(dt)
+    for _, unit in ipairs(self.units) do
+        unit:update(dt)
     end
 end
 
 
 function GameplayRoom:render()
-    for _, object in ipairs(self.objects) do
-        object:render()
+    for _, unit in ipairs(self.units) do
+        unit:render()
     end
-end
-
-
-function GameplayRoom:add_object(class, params)
-    local object = class(params)
-    table.insert(self.objects, object)
-    return object
 end
