@@ -8,10 +8,11 @@ function GameplayRoom:new(app)
     self.app = app
     self.objects = {}  ---@type table
     self.units = {}  ---@type Unit[]
+    self.effects = {}  ---@type Effect[]
 
     self.player = PlayerController(self)
 
-    self.knight = nil
+    self.knight = nil  ---@type Knight
 end
 
 
@@ -22,7 +23,6 @@ function GameplayRoom:init()
     end
     self.units = {}
 
-    ---@type Knight
     self.knight = self:spawn_unit(Knight, Vector2(100, 100))
 
     for i=1,5 do
@@ -37,12 +37,19 @@ function GameplayRoom:update(dt)
     for _, unit in ipairs(self.units) do
         unit:update(dt)
     end
+
+    for _, effect in ipairs(self.effects) do
+        effect:update(dt)
+    end
 end
 
 
 function GameplayRoom:render()
     for _, unit in ipairs(self.units) do
         unit:render()
+    end
+    for _, effect in ipairs(self.effects) do
+        effect:render()
     end
 end
 
@@ -54,6 +61,12 @@ function GameplayRoom:spawn_unit(unit_class, position)
     local unit = unit_class(random_position)
     table.insert(self.units, unit)
     return unit
+end
+
+
+---@param effect Effect
+function GameplayRoom:add_effect(effect)
+    table.insert(self.effects, effect)
 end
 
 
