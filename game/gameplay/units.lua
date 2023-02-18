@@ -27,6 +27,7 @@ function Unit:render() end
 
 
 ---@class Knight: Unit
+---@operator call(): Knight
 Knight = Unit:extend()
 
 
@@ -56,6 +57,7 @@ end
 
 
 ---@class NormalZombie: Unit
+---@operator call(): NormalZombie
 NormalZombie = Unit:extend()
 
 
