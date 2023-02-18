@@ -41,6 +41,22 @@ function GameplayRoom:update(dt)
     for _, effect in ipairs(self.effects) do
         effect:update(dt)
     end
+
+    for i=#self.units, 1, -1 do
+        local unit = self.units[i]
+        if not unit.alive then
+            unit:destroy()
+            table.remove(self.units, i)            
+        end
+    end
+
+    for i=#self.effects, 1, -1 do
+        local effect = self.effects[i]
+        if not effect.alive then
+            effect:destroy()
+            table.remove(self.effects, i)            
+        end
+    end
 end
 
 
