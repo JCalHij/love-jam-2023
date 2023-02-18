@@ -8,6 +8,15 @@ function love.load(args, unfiltered_args)
     require "core"
 	require "game"
 
+	-- Window
+	love.graphics.setDefaultFilter("nearest", "nearest")
+	WindowWidth, WindowHeight = love.window.getMode()
+	VirtualWidth, VirtualHeight = 720, 480
+	ScaleX, ScaleY = WindowWidth/VirtualWidth, WindowHeight/VirtualHeight
+	CanvasX, CanvasY = 0, 0
+	love.resize(WindowWidth, WindowHeight)
+	MainCanvas = love.graphics.newCanvas(VirtualWidth, VirtualHeight)
+
 	g_GameApp = GameApp()
 end
 
@@ -18,7 +27,16 @@ end
 
 
 function love.draw()
-	g_GameApp:render()
+    love.graphics.setCanvas(MainCanvas)
+    love.graphics.setBlendMode('alpha', "alphamultiply")
+    love.graphics.clear({0.3, 0.5, 1.0, 1.0})
+    g_GameApp:render()
+    love.graphics.setCanvas()
+
+    SetDrawColor({1, 1, 1, 1})
+    love.graphics.setBlendMode('alpha', 'premultiplied')
+    love.graphics.clear({0.1, 0.1, 0.1, 1})
+    love.graphics.draw(MainCanvas, CanvasX, CanvasY, 0, ScaleX, ScaleY)
 end
 
 
@@ -61,4 +79,20 @@ function love.run()
 
 		love.timer.sleep(0.001)
 	end
+end
+
+
+function love.resize(x, y)
+    WindowWidth, WindowHeight = x, y
+    local tx = WindowWidth / VirtualWidth
+    local ty = WindowHeight / VirtualHeight
+    if tx > ty then
+        ScaleX, ScaleY = ty, ty
+        CanvasY = 0
+        CanvasX = 0.5*(WindowWidth - ScaleX*VirtualWidth)
+    else
+        ScaleX, ScaleY = tx, tx
+        CanvasX = 0
+        CanvasY = 0.5*(WindowHeight - ScaleY*VirtualHeight)
+    end
 end
