@@ -191,7 +191,7 @@
       "BoardIndex": 0,
       "Position.X": 144,
       "Position.Y": 544,
-      "Checkbox.Checked": false,
+      "Checkbox.Checked": true,
       "Progression.Current": 0,
       "Progression.Max": 0,
       "Description": "Enemy knockback on magic shield explosion",

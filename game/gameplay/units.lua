@@ -301,38 +301,6 @@ end
 ---------------------------------------------------------------------------------
 
 
-
----@class MagicShield: Unit
----@operator call(): MagicShield
-MagicShield = Unit:extend()
-
-
----@param room GameplayRoom
----@param position Vec2
-function MagicShield:new(room, position)
-    ---@type UnitDef
-    local BaseMagicShieldDef = {
-        position = position,
-        hit_points = 10,
-        move_speed = 0,
-        attack_damage = 0,
-        attack_speed = 0.0,
-        collider_radius = 50,
-    }
-    MagicShield.super.new(self, room, BaseMagicShieldDef)
-end
-
-function MagicShield:render()
-    SetDrawColor({1, 1, 0, 1})
-    love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
-    SetDrawColor({1, 1, 01, 1})
-end
-
-
-
----------------------------------------------------------------------------------
-
-
 ---@class ZombieState: Object
 local ZombieState = Object:extend()
 function ZombieState:update(dt) end
@@ -344,6 +312,9 @@ local ZombieMovingState = ZombieState:extend()
 
 ---@class ZombieAttackingState: ZombieState
 local ZombieAttackingState = ZombieState:extend()
+
+---@class ZombieKnockbackState: ZombieState
+local ZombieKnockbackState = ZombieState:extend()
 
 
 
@@ -428,6 +399,29 @@ end
 
 
 
+---@param zombie NormalZombie
+function ZombieKnockbackState:new(zombie)
+    self.zombie = zombie
+    self.knockback_time = 0.4
+end
+
+function ZombieKnockbackState:update(dt)
+    self.knockback_time = self.knockback_time - dt
+    if self.knockback_time <= 0.0 then
+        self.zombie.state = ZombieMovingState(self.zombie)
+        self:destroy()
+    else
+        -- Actual knockback movement
+        self.zombie.pos = self.zombie.pos + self.zombie.knockback_vector * dt
+    end
+end
+
+function ZombieKnockbackState:destroy()
+    self.zombie = nil
+end
+
+
+
 
 ---@class NormalZombie: Unit
 ---@operator call(): NormalZombie
@@ -450,6 +444,7 @@ function NormalZombie:new(room, position)
 
     self.state = ZombieMovingState(self)
     self.target = nil  ---@type Unit
+    self.knockback_vector = Vector2(0, 0)
 end
 
 function NormalZombie:update(dt)
@@ -467,4 +462,60 @@ function NormalZombie:destroy()
     self.state:destroy()
     self.state = nil
     self.room = nil
+end
+
+
+
+---------------------------------------------------------------------------------
+
+
+
+---@class MagicShield: Unit
+---@operator call(): MagicShield
+MagicShield = Unit:extend()
+
+
+---@param room GameplayRoom
+---@param position Vec2
+function MagicShield:new(room, position)
+    ---@type UnitDef
+    local BaseMagicShieldDef = {
+        position = position,
+        hit_points = 10,
+        move_speed = 0,
+        attack_damage = 0,
+        attack_speed = 0.0,
+        collider_radius = 50,
+    }
+    MagicShield.super.new(self, room, BaseMagicShieldDef)
+end
+
+function MagicShield:render()
+    SetDrawColor({1, 1, 0, 1})
+    love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
+    SetDrawColor({1, 1, 1, 1})
+end
+
+---@param damage integer
+---@param attacker Unit
+function MagicShield:take_damage(damage, attacker)
+    MagicShield.super.take_damage(self, damage, attacker)
+
+    if not self.alive then
+        -- If the magic shield gets destroyed, knocks back all enemy units, no matter their distance to the shield
+        local enemy_units = self.room:filter_units(function (unit)
+            return table.ifind({ NormalZombie }, unit:class()) ~= nil
+        end)
+
+        for _, unit in ipairs(enemy_units) do
+            ---@cast unit NormalZombie
+            -- Knockback vector and magnitude
+            local knockback_vector = (unit.pos - self.pos):normalizeInplace()
+            local magnitude = 600
+
+            unit.state:destroy()
+            unit.knockback_vector = magnitude * knockback_vector
+            unit.state = ZombieKnockbackState(unit)
+        end
+    end
 end
