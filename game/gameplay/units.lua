@@ -65,6 +65,28 @@ function KnightIdleState:new(knight)
 end
 
 function KnightIdleState:update(dt)
+    -- If collision with an enemy, select it as next target
+    ---@param unit Unit
+    local filter = function(unit)
+        -- The target unit class needs to be one of the following
+        local valid_unit_classes = { NormalZombie }
+        if table.ifind(valid_unit_classes, unit:class()) == nil then
+            return false
+        end
+        -- Collision between target unit and self is required
+        local sum_radius = self.knight.collider_radius + unit.collider_radius
+        if self.knight:distance_to(unit) > sum_radius then
+            return false
+        end
+        -- All checks OK
+        return true
+    end
+    local new_targets = self.knight.room:filter_units(filter)
+    if #new_targets > 0 then
+        self.knight.targets = new_targets
+        self.knight.state = KnightAttackingState(self.knight)
+        self:destroy()
+    end
 end
 
 function KnightIdleState:destroy()
