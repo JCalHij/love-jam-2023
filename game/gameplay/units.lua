@@ -17,6 +17,7 @@ function Unit:new(room, unitDef)
     self.room = room
     self.pos = unitDef.position
     self.hp = unitDef.hit_points
+    self.max_hp = unitDef.hit_points
     self.attack_damage = unitDef.attack_damage
     self.attack_speed = unitDef.attack_speed
     self.move_speed = unitDef.move_speed
@@ -369,4 +370,11 @@ function NormalZombie:render()
     SetDrawColor({1, 0, 0, 1})
     love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
     SetDrawColor({1, 1, 01, 1})
+end
+
+function NormalZombie:destroy()
+    self.room.enemies_left = self.room.enemies_left - 1
+    self.state:destroy()
+    self.state = nil
+    self.room = nil
 end
