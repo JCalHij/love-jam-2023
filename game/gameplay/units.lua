@@ -218,7 +218,6 @@ function Knight:set_targets(targets)
     return false
 end
 
-
 ---@param damage integer
 ---@param attacker Unit
 function Knight:take_damage(damage, attacker)
@@ -256,6 +255,12 @@ function Princess:render()
     SetDrawColor({1, 0, 1, 1})
     love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
     SetDrawColor({1, 1, 01, 1})
+end
+
+---@param damage integer
+---@param attacker Unit
+function Princess:take_damage(damage, attacker)
+    -- The Princess unit does not take damage, but it signals the end of the game (lost condition)
 end
 
 
