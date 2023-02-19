@@ -13,6 +13,7 @@ function GameplayRoom:new(app)
     self.player = PlayerController(self)
 
     self.knight = nil  ---@type Knight
+    self.princess = nil  ---@type Princess
 end
 
 
@@ -26,7 +27,7 @@ function GameplayRoom:init()
     -- Spawn first the magic shield, so that it gets rendered first and appears below all other units
     self:spawn_unit(MagicShield, Vector2(VirtualWidth/2, VirtualHeight/2))
     self.knight = self:spawn_unit(Knight, Vector2(100, 100))
-    self:spawn_unit(Princess, Vector2(VirtualWidth/2, VirtualHeight/2))
+    self.princess = self:spawn_unit(Princess, Vector2(VirtualWidth/2, VirtualHeight/2))
 
     for i=1,5 do
         self:spawn_unit(NormalZombie)
@@ -77,7 +78,7 @@ end
 ---@param position? Vec2
 function GameplayRoom:spawn_unit(unit_class, position)
     local random_position = position or Vector2(math.random(0, 300), math.random(0, 300))
-    local unit = unit_class(random_position)
+    local unit = unit_class(self, random_position)
     table.insert(self.units, unit)
     return unit
 end
