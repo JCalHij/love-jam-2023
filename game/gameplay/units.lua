@@ -60,6 +60,9 @@ local KnightMovingState = KnightState:extend()
 ---@class KnightAttackingState: KnightState
 local KnightAttackingState = KnightState:extend()
 
+---@class KnightKnockbackState: KnightState
+local KnightKnockbackState = KnightState:extend()
+
 
 
 ---@param knight Knight
@@ -174,6 +177,29 @@ end
 
 
 
+---@param knight Knight
+function KnightKnockbackState:new(knight)
+    self.knight = knight
+    self.knockback_time = 0.2
+end
+
+function KnightKnockbackState:update(dt)
+    self.knockback_time = self.knockback_time - dt
+    if self.knockback_time <= 0.0 then
+        self.knight.state = KnightMovingState(self.knight)
+        self:destroy()
+    else
+        -- Actual knockback movement
+        self.knight.pos = self.knight.pos + self.knight.knockback_vector * dt
+    end
+end
+
+function KnightKnockbackState:destroy()
+    self.knight = nil
+end
+
+
+
 ---@class Knight: Unit
 ---@operator call(): Knight
 Knight = Unit:extend()
@@ -195,6 +221,7 @@ function Knight:new(room, position)
 
     self.targets = {}  ---@type Unit[]
     self.state = KnightIdleState(self)  ---@type KnightState
+    self.knockback_vector = Vector2(0, 0)
 end
 
 function Knight:update(dt)
@@ -221,7 +248,13 @@ end
 ---@param damage integer
 ---@param attacker Unit
 function Knight:take_damage(damage, attacker)
-    -- Knight does not take damage
+    -- Knight does not take damage, but it gets knocked back by the enemy zombies
+    local knoback_direction = (self.pos - attacker.pos):normalizeInplace()  ---@type Vec2
+    --//TODO[javi]: knockback magnitude depending on enemy type?
+    local magnitude = 200
+    self.knockback_vector = magnitude * knoback_direction
+    self.state:destroy()
+    self.state = KnightKnockbackState(self)
 end
 
 

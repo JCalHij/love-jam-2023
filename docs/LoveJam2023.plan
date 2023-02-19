@@ -911,7 +911,7 @@
       "BoardIndex": 0,
       "Position.X": 144,
       "Position.Y": 528,
-      "Checkbox.Checked": false,
+      "Checkbox.Checked": true,
       "Progression.Current": 0,
       "Progression.Max": 0,
       "Description": "Enemy attacks on player (knockback)",
