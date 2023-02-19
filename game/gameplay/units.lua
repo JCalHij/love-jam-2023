@@ -31,6 +31,10 @@ function Unit:take_damage(damage)
         self.alive = false
     end
 end
+---@param other Unit
+function Unit:distance_to(other)
+    return (other.pos - self.pos):len()
+end
 
 
 
@@ -105,17 +109,25 @@ end
 ---@param knight Knight
 function KnightAttackingState:new(knight)
     self.knight = knight
-    self.attack_timer = 0
+    self.attack_timer = knight.attack_speed/2
 end
 
 function KnightAttackingState:update(dt)
+    -- Before attacking, a minimum is distance to the target is required,
+    -- otherwise we switch to moving
+    local target = self.knight.targets[1]
+    if not target or self.knight:distance_to(target) > 1.5*(self.knight.collider_radius+target.collider_radius) then
+        self.knight.state = KnightMovingState(self.knight)
+        self:destroy()
+        return
+    end
+
     self.attack_timer = self.attack_timer - dt
     if self.attack_timer <= 0 then
         printf("Knight attacking!")
         -- Reset timer
         self.attack_timer = self.attack_timer + self.knight.attack_speed
         -- Attack
-        local target = self.knight.targets[1]
         target:take_damage(self.knight.attack_damage)
         if not target.alive then
             printf("Target is dead!")
@@ -316,7 +328,7 @@ function NormalZombie:new(room, position)
     ---@type UnitDef
     local BaseNormalZombieDef = {
         position = position,
-        hit_points = 1,
+        hit_points = 3,
         move_speed = 10,
         attack_damage = 1,
         attack_speed = 2.0,
