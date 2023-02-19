@@ -26,7 +26,9 @@ function Unit:new(room, unitDef)
 end
 function Unit:update(dt) end
 function Unit:render() end
-function Unit:take_damage(damage)
+---@param damage integer
+---@param attacker Unit
+function Unit:take_damage(damage, attacker)
     self.hp = self.hp - damage
     if self.hp <= 0 then
         self.alive = false
@@ -57,6 +59,9 @@ local KnightMovingState = KnightState:extend()
 
 ---@class KnightAttackingState: KnightState
 local KnightAttackingState = KnightState:extend()
+
+---@class KnightKnockbackState: KnightState
+local KnightKnockbackState = KnightState:extend()
 
 
 
@@ -151,7 +156,7 @@ function KnightAttackingState:update(dt)
         -- Reset timer
         self.attack_timer = self.attack_timer + self.knight.attack_speed
         -- Attack
-        target:take_damage(self.knight.attack_damage)
+        target:take_damage(self.knight.attack_damage, self.knight)
         if not target.alive then
             printf("Target is dead!")
             -- Remove target from list and go to the next one
@@ -167,6 +172,29 @@ function KnightAttackingState:update(dt)
 end
 
 function KnightAttackingState:destroy()
+    self.knight = nil
+end
+
+
+
+---@param knight Knight
+function KnightKnockbackState:new(knight)
+    self.knight = knight
+    self.knockback_time = 0.2
+end
+
+function KnightKnockbackState:update(dt)
+    self.knockback_time = self.knockback_time - dt
+    if self.knockback_time <= 0.0 then
+        self.knight.state = KnightMovingState(self.knight)
+        self:destroy()
+    else
+        -- Actual knockback movement
+        self.knight.pos = self.knight.pos + self.knight.knockback_vector * dt
+    end
+end
+
+function KnightKnockbackState:destroy()
     self.knight = nil
 end
 
@@ -193,6 +221,7 @@ function Knight:new(room, position)
 
     self.targets = {}  ---@type Unit[]
     self.state = KnightIdleState(self)  ---@type KnightState
+    self.knockback_vector = Vector2(0, 0)
 end
 
 function Knight:update(dt)
@@ -215,6 +244,19 @@ function Knight:set_targets(targets)
     end
     return false
 end
+
+---@param damage integer
+---@param attacker Unit
+function Knight:take_damage(damage, attacker)
+    -- Knight does not take damage, but it gets knocked back by the enemy zombies
+    local knoback_direction = (self.pos - attacker.pos):normalizeInplace()  ---@type Vec2
+    --//TODO[javi]: knockback magnitude depending on enemy type?
+    local magnitude = 200
+    self.knockback_vector = magnitude * knoback_direction
+    self.state:destroy()
+    self.state = KnightKnockbackState(self)
+end
+
 
 
 
@@ -248,6 +290,180 @@ function Princess:render()
     SetDrawColor({1, 1, 01, 1})
 end
 
+---@param damage integer
+---@param attacker Unit
+function Princess:take_damage(damage, attacker)
+    -- The Princess unit does not take damage, but it signals the end of the game (lost condition)
+end
+
+
+
+---------------------------------------------------------------------------------
+
+
+---@class ZombieState: Object
+local ZombieState = Object:extend()
+function ZombieState:update(dt) end
+
+
+
+---@class ZombieMovingState: ZombieState
+local ZombieMovingState = ZombieState:extend()
+
+---@class ZombieAttackingState: ZombieState
+local ZombieAttackingState = ZombieState:extend()
+
+---@class ZombieKnockbackState: ZombieState
+local ZombieKnockbackState = ZombieState:extend()
+
+
+
+---@param zombie NormalZombie
+function ZombieMovingState:new(zombie)
+    self.zombie = zombie
+end
+
+function ZombieMovingState:update(dt)
+    -- If collision with allied unit, switch to attack.
+    ---@param unit Unit
+    local filter = function(unit)
+        -- The target unit class needs to be one of the following
+        local valid_unit_classes = { Knight, MagicShield, Princess }
+        if table.ifind(valid_unit_classes, unit:class()) == nil then
+            return false
+        end
+        -- Collision between target unit and self is required
+        local sum_radius = self.zombie.collider_radius + unit.collider_radius
+        local delta_pos = unit.pos - self.zombie.pos
+        if delta_pos:len() > sum_radius then
+            return false
+        end
+        -- All checks OK
+        return true
+    end
+    local collided_wit_allied_units = self.zombie.room:filter_units(filter)
+    if #collided_wit_allied_units > 0  then
+        -- We are colliding with a unit we can attack, so the zombie switches to attack mode
+        self.zombie.target = collided_wit_allied_units[1]
+        self.zombie.state = ZombieAttackingState(self.zombie)
+        self:destroy()
+    else
+        -- Nothing can stop the zombie, so move towards the princess.
+        local move_vector = (self.zombie.room.princess.pos - self.zombie.pos):normalizeInplace()
+        self.zombie.pos = self.zombie.pos + move_vector*self.zombie.move_speed*dt
+    end
+end
+
+function ZombieMovingState:destroy()
+    self.zombie = nil
+end
+
+
+
+---@param zombie NormalZombie
+function ZombieAttackingState:new(zombie)
+    self.zombie = zombie
+    self.attack_timer = zombie.attack_speed  -- Zombies start with full cooldown of attack
+end
+
+function ZombieAttackingState:update(dt)
+    -- Before attacking, a minimum is distance to the target is required,
+    -- otherwise we switch to moving
+    local target = self.zombie.target
+    if not target or self.zombie:distance_to(target) > 1.5*(self.zombie.collider_radius+target.collider_radius) then
+        self.zombie.state = ZombieMovingState(self.zombie)
+        self:destroy()
+        return
+    end
+
+    self.attack_timer = self.attack_timer - dt
+    if self.attack_timer <= 0 then
+        printf("Zombie attacking!")
+        -- Reset timer
+        self.attack_timer = self.attack_timer + self.zombie.attack_speed
+        -- Attack
+        target:take_damage(self.zombie.attack_damage, self.zombie)
+        if not target.alive then
+            printf("Target is dead!")
+            -- Move towards the target
+            self.zombie.target = nil
+            self.zombie.state = ZombieMovingState(self.zombie)
+            self:destroy()
+        end
+    end
+end
+
+function ZombieAttackingState:destroy()
+    self.zombie = nil
+end
+
+
+
+---@param zombie NormalZombie
+function ZombieKnockbackState:new(zombie)
+    self.zombie = zombie
+    self.knockback_time = 0.4
+end
+
+function ZombieKnockbackState:update(dt)
+    self.knockback_time = self.knockback_time - dt
+    if self.knockback_time <= 0.0 then
+        self.zombie.state = ZombieMovingState(self.zombie)
+        self:destroy()
+    else
+        -- Actual knockback movement
+        self.zombie.pos = self.zombie.pos + self.zombie.knockback_vector * dt
+    end
+end
+
+function ZombieKnockbackState:destroy()
+    self.zombie = nil
+end
+
+
+
+
+---@class NormalZombie: Unit
+---@operator call(): NormalZombie
+NormalZombie = Unit:extend()
+
+
+---@param room GameplayRoom
+---@param position Vec2
+function NormalZombie:new(room, position)
+    ---@type UnitDef
+    local BaseNormalZombieDef = {
+        position = position,
+        hit_points = 3,
+        move_speed = 20,
+        attack_damage = 1,
+        attack_speed = 2.0,
+        collider_radius = 15,
+    }
+    NormalZombie.super.new(self, room, BaseNormalZombieDef)
+
+    self.state = ZombieMovingState(self)
+    self.target = nil  ---@type Unit
+    self.knockback_vector = Vector2(0, 0)
+end
+
+function NormalZombie:update(dt)
+    self.state:update(dt)
+end
+
+function NormalZombie:render()
+    SetDrawColor({1, 0, 0, 1})
+    love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
+    SetDrawColor({1, 1, 01, 1})
+end
+
+function NormalZombie:destroy()
+    self.room.enemies_left = self.room.enemies_left - 1
+    self.state:destroy()
+    self.state = nil
+    self.room = nil
+end
+
 
 
 ---------------------------------------------------------------------------------
@@ -277,104 +493,29 @@ end
 function MagicShield:render()
     SetDrawColor({1, 1, 0, 1})
     love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
-    SetDrawColor({1, 1, 01, 1})
+    SetDrawColor({1, 1, 1, 1})
 end
 
+---@param damage integer
+---@param attacker Unit
+function MagicShield:take_damage(damage, attacker)
+    MagicShield.super.take_damage(self, damage, attacker)
 
+    if not self.alive then
+        -- If the magic shield gets destroyed, knocks back all enemy units, no matter their distance to the shield
+        local enemy_units = self.room:filter_units(function (unit)
+            return table.ifind({ NormalZombie }, unit:class()) ~= nil
+        end)
 
----------------------------------------------------------------------------------
+        for _, unit in ipairs(enemy_units) do
+            ---@cast unit NormalZombie
+            -- Knockback vector and magnitude
+            local knockback_vector = (unit.pos - self.pos):normalizeInplace()
+            local magnitude = 600
 
-
----@class ZombieState: Object
-local ZombieState = Object:extend()
-function ZombieState:update(dt) end
-
-
-
----@class ZombieMovingState: ZombieState
-local ZombieMovingState = ZombieState:extend()
-
----@class ZombieAttackingState: ZombieState
-local ZombieAttackingState = ZombieState:extend()
-
-
-
----@param zombie NormalZombie
-function ZombieMovingState:new(zombie)
-    self.zombie = zombie
-end
-
-function ZombieMovingState:update(dt)
-    -- If collision with magic circle or player, switch to attack.
-    ---@param unit Unit
-    local filter = function(unit)
-        -- The target unit class needs to be one of the following
-        local valid_unit_classes = { Knight, MagicShield }
-        if table.ifind(valid_unit_classes, unit:class()) == nil then
-            return false
+            unit.state:destroy()
+            unit.knockback_vector = magnitude * knockback_vector
+            unit.state = ZombieKnockbackState(unit)
         end
-        -- Collision between target unit and self is required
-        local sum_radius = self.zombie.collider_radius + unit.collider_radius
-        local delta_pos = unit.pos - self.zombie.pos
-        if delta_pos:len() > sum_radius then
-            return false
-        end
-        -- All checks OK
-        return true
     end
-    local knight_magic_shield = self.zombie.room:filter_units(filter)
-    if #knight_magic_shield > 0  then
-        -- We are colliding with an enemy we can attack, so the zombie switches to attack mode
-        self.zombie.state = ZombieAttackingState(self.zombie)
-        self:destroy()
-    else
-        -- Nothing can stop the zombie, so move towards the princess.
-        local move_vector = (self.zombie.room.princess.pos - self.zombie.pos):normalizeInplace()
-        self.zombie.pos = self.zombie.pos + move_vector*self.zombie.move_speed*dt
-    end
-end
-
-function ZombieMovingState:destroy()
-    self.zombie = nil
-end
-
-
-
----@class NormalZombie: Unit
----@operator call(): NormalZombie
-NormalZombie = Unit:extend()
-
-
----@param room GameplayRoom
----@param position Vec2
-function NormalZombie:new(room, position)
-    ---@type UnitDef
-    local BaseNormalZombieDef = {
-        position = position,
-        hit_points = 3,
-        move_speed = 10,
-        attack_damage = 1,
-        attack_speed = 2.0,
-        collider_radius = 15,
-    }
-    NormalZombie.super.new(self, room, BaseNormalZombieDef)
-
-    self.state = ZombieMovingState(self)
-end
-
-function NormalZombie:update(dt)
-    self.state:update(dt)
-end
-
-function NormalZombie:render()
-    SetDrawColor({1, 0, 0, 1})
-    love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
-    SetDrawColor({1, 1, 01, 1})
-end
-
-function NormalZombie:destroy()
-    self.room.enemies_left = self.room.enemies_left - 1
-    self.state:destroy()
-    self.state = nil
-    self.room = nil
 end
