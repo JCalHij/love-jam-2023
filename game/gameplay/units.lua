@@ -315,11 +315,11 @@ function ZombieMovingState:new(zombie)
 end
 
 function ZombieMovingState:update(dt)
-    -- If collision with magic circle or player, switch to attack.
+    -- If collision with allied unit, switch to attack.
     ---@param unit Unit
     local filter = function(unit)
         -- The target unit class needs to be one of the following
-        local valid_unit_classes = { Knight, MagicShield }
+        local valid_unit_classes = { Knight, MagicShield, Princess }
         if table.ifind(valid_unit_classes, unit:class()) == nil then
             return false
         end
@@ -332,9 +332,10 @@ function ZombieMovingState:update(dt)
         -- All checks OK
         return true
     end
-    local knight_magic_shield = self.zombie.room:filter_units(filter)
-    if #knight_magic_shield > 0  then
-        -- We are colliding with an enemy we can attack, so the zombie switches to attack mode
+    local collided_wit_allied_units = self.zombie.room:filter_units(filter)
+    if #collided_wit_allied_units > 0  then
+        -- We are colliding with a unit we can attack, so the zombie switches to attack mode
+        self.zombie.target = collided_wit_allied_units[1]
         self.zombie.state = ZombieAttackingState(self.zombie)
         self:destroy()
     else
@@ -350,6 +351,46 @@ end
 
 
 
+---@param zombie NormalZombie
+function ZombieAttackingState:new(zombie)
+    self.zombie = zombie
+    self.attack_timer = zombie.attack_speed  -- Zombies start with full cooldown of attack
+end
+
+function ZombieAttackingState:update(dt)
+    -- Before attacking, a minimum is distance to the target is required,
+    -- otherwise we switch to moving
+    local target = self.zombie.target
+    if not target or self.zombie:distance_to(target) > 1.5*(self.zombie.collider_radius+target.collider_radius) then
+        self.zombie.state = ZombieMovingState(self.zombie)
+        self:destroy()
+        return
+    end
+
+    self.attack_timer = self.attack_timer - dt
+    if self.attack_timer <= 0 then
+        printf("Zombie attacking!")
+        -- Reset timer
+        self.attack_timer = self.attack_timer + self.zombie.attack_speed
+        -- Attack
+        target:take_damage(self.zombie.attack_damage, self.zombie)
+        if not target.alive then
+            printf("Target is dead!")
+            -- Move towards the target
+            self.zombie.target = nil
+            self.zombie.state = ZombieMovingState(self.zombie)
+            self:destroy()
+        end
+    end
+end
+
+function ZombieAttackingState:destroy()
+    self.zombie = nil
+end
+
+
+
+
 ---@class NormalZombie: Unit
 ---@operator call(): NormalZombie
 NormalZombie = Unit:extend()
@@ -362,7 +403,7 @@ function NormalZombie:new(room, position)
     local BaseNormalZombieDef = {
         position = position,
         hit_points = 3,
-        move_speed = 10,
+        move_speed = 20,
         attack_damage = 1,
         attack_speed = 2.0,
         collider_radius = 15,
@@ -370,6 +411,7 @@ function NormalZombie:new(room, position)
     NormalZombie.super.new(self, room, BaseNormalZombieDef)
 
     self.state = ZombieMovingState(self)
+    self.target = nil  ---@type Unit
 end
 
 function NormalZombie:update(dt)
