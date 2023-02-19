@@ -11,8 +11,10 @@
 Unit = Object:extend()
 
 
+---@param room GameplayRoom
 ---@param unitDef UnitDef
-function Unit:new(unitDef)
+function Unit:new(room, unitDef)
+    self.room = room
     self.pos = unitDef.position
     self.hp = unitDef.hit_points
     self.attack_damage = unitDef.attack_damage
@@ -140,18 +142,19 @@ end
 Knight = Unit:extend()
 
 
+---@param room GameplayRoom
 ---@param position Vec2
-function Knight:new(position)
+function Knight:new(room, position)
     ---@type UnitDef
     local BaseKnightDef = {
         position = position,
         hit_points = 1,
-        move_speed = 20,
+        move_speed = 60,
         attack_damage = 1,
         attack_speed = 1.0,
         collider_radius = 5,
     }
-    Knight.super.new(self, BaseKnightDef)
+    Knight.super.new(self, room, BaseKnightDef)
 
     self.targets = {}  ---@type Unit[]
     self.state = KnightIdleState(self)  ---@type KnightState
@@ -189,8 +192,9 @@ end
 Princess = Unit:extend()
 
 
+---@param room GameplayRoom
 ---@param position Vec2
-function Princess:new(position)
+function Princess:new(room, position)
     ---@type UnitDef
     local BasePrincessDef = {
         position = position,
@@ -200,7 +204,7 @@ function Princess:new(position)
         attack_speed = 0.0,
         collider_radius = 5,
     }
-    Princess.super.new(self, BasePrincessDef)
+    Princess.super.new(self, room, BasePrincessDef)
 end
 
 function Princess:render()
@@ -220,8 +224,9 @@ end
 MagicShield = Unit:extend()
 
 
+---@param room GameplayRoom
 ---@param position Vec2
-function MagicShield:new(position)
+function MagicShield:new(room, position)
     ---@type UnitDef
     local BaseMagicShieldDef = {
         position = position,
@@ -231,7 +236,7 @@ function MagicShield:new(position)
         attack_speed = 0.0,
         collider_radius = 50,
     }
-    MagicShield.super.new(self, BaseMagicShieldDef)
+    MagicShield.super.new(self, room, BaseMagicShieldDef)
 end
 
 function MagicShield:render()
@@ -245,14 +250,69 @@ end
 ---------------------------------------------------------------------------------
 
 
+---@class ZombieState: Object
+local ZombieState = Object:extend()
+function ZombieState:update(dt) end
+
+
+
+---@class ZombieMovingState: ZombieState
+local ZombieMovingState = ZombieState:extend()
+
+---@class ZombieAttackingState: ZombieState
+local ZombieAttackingState = ZombieState:extend()
+
+
+
+---@param zombie NormalZombie
+function ZombieMovingState:new(zombie)
+    self.zombie = zombie
+end
+
+function ZombieMovingState:update(dt)
+    -- If collision with magic circle or player, switch to attack.
+    ---@param unit Unit
+    local filter = function(unit)
+        -- The target unit class needs to be one of the following
+        local valid_unit_classes = { Knight, MagicShield }
+        if table.ifind(valid_unit_classes, unit:class()) == nil then
+            return false
+        end
+        -- Collision between target unit and self is required
+        local sum_radius = self.zombie.collider_radius + unit.collider_radius
+        local delta_pos = unit.pos - self.zombie.pos
+        if delta_pos:len() > sum_radius then
+            return false
+        end
+        -- All checks OK
+        return true
+    end
+    local knight_magic_shield = self.zombie.room:filter_units(filter)
+    if #knight_magic_shield > 0  then
+        -- We are colliding with an enemy we can attack, so the zombie switches to attack mode
+        self.zombie.state = ZombieAttackingState(self.zombie)
+        self:destroy()
+    else
+        -- Nothing can stop the zombie, so move towards the princess.
+        local move_vector = (self.zombie.room.princess.pos - self.zombie.pos):normalizeInplace()
+        self.zombie.pos = self.zombie.pos + move_vector*self.zombie.move_speed*dt
+    end
+end
+
+function ZombieMovingState:destroy()
+    self.zombie = nil
+end
+
+
 
 ---@class NormalZombie: Unit
 ---@operator call(): NormalZombie
 NormalZombie = Unit:extend()
 
 
+---@param room GameplayRoom
 ---@param position Vec2
-function NormalZombie:new(position)
+function NormalZombie:new(room, position)
     ---@type UnitDef
     local BaseNormalZombieDef = {
         position = position,
@@ -262,7 +322,13 @@ function NormalZombie:new(position)
         attack_speed = 2.0,
         collider_radius = 15,
     }
-    NormalZombie.super.new(self, BaseNormalZombieDef)
+    NormalZombie.super.new(self, room, BaseNormalZombieDef)
+
+    self.state = ZombieMovingState(self)
+end
+
+function NormalZombie:update(dt)
+    self.state:update(dt)
 end
 
 function NormalZombie:render()
