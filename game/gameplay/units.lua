@@ -219,6 +219,14 @@ function Knight:set_targets(targets)
 end
 
 
+---@param damage integer
+---@param attacker Unit
+function Knight:take_damage(damage, attacker)
+    -- Knight does not take damage
+end
+
+
+
 
 ---------------------------------------------------------------------------------
 
