@@ -26,7 +26,9 @@ function Unit:new(room, unitDef)
 end
 function Unit:update(dt) end
 function Unit:render() end
-function Unit:take_damage(damage)
+---@param damage integer
+---@param attacker Unit
+function Unit:take_damage(damage, attacker)
     self.hp = self.hp - damage
     if self.hp <= 0 then
         self.alive = false
@@ -151,7 +153,7 @@ function KnightAttackingState:update(dt)
         -- Reset timer
         self.attack_timer = self.attack_timer + self.knight.attack_speed
         -- Attack
-        target:take_damage(self.knight.attack_damage)
+        target:take_damage(self.knight.attack_damage, self.knight)
         if not target.alive then
             printf("Target is dead!")
             -- Remove target from list and go to the next one
