@@ -39,14 +39,15 @@ end
 LostScreenEffect = Effect:extend()
 
 
-function LostScreenEffect:new()
+function LostScreenEffect:new(duration)
     self.alive = true
     self.alpha = 0.0
-    self.fade_in_speed = 0.3
+    self.target_alpha = 1.0
+    self.fade_in_speed = self.target_alpha / duration
 end
 
 function LostScreenEffect:update(dt)
-    self.alpha = math.min(self.alpha + self.fade_in_speed*dt, 1.0)
+    self.alpha = math.min(self.alpha + self.fade_in_speed*dt, self.target_alpha)
 end
 
 function LostScreenEffect:render()

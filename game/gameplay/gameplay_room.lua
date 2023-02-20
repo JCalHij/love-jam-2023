@@ -19,6 +19,13 @@ function GameplayRoom:new(app)
 
     self.enemies_left = 0
     self.player_points = 0
+
+
+    self.event_layer:register(self, PlayerLostEvent, function(event)
+        ---@cast event PlayerLostEvent
+        local duration = 2.0
+        self:add_effect(LostScreenEffect(duration))
+    end)
 end
 
 

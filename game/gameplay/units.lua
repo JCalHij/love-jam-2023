@@ -297,7 +297,7 @@ function Princess:take_damage(damage, attacker)
     -- The Princess unit does not take damage, but it signals the end of the game (lost condition)
     if not self.dead then
         self.dead = true
-        self.room:add_effect(LostScreenEffect())
+        self.room.event_layer:notify(PlayerLostEvent())
     end
 end
 
@@ -372,8 +372,8 @@ function ZombieAttackingState:new(zombie)
 end
 
 function ZombieAttackingState:update(dt)
-    -- Before attacking, a minimum is distance to the target is required,
-    -- otherwise we switch to moving
+    -- Before attacking, a minimum distance to the target is required,
+    -- otherwise we switch to moving.
     local target = self.zombie.target
     if not target or self.zombie:distance_to(target) > 1.5*(self.zombie.collider_radius+target.collider_radius) then
         self.zombie.state = ZombieMovingState(self.zombie)
@@ -390,7 +390,7 @@ function ZombieAttackingState:update(dt)
         target:take_damage(self.zombie.attack_damage, self.zombie)
         if not target.alive then
             printf("Target is dead!")
-            -- Move towards the target
+            -- Move towards the target, as current is dead
             self.zombie.target = nil
             self.zombie.state = ZombieMovingState(self.zombie)
             self:destroy()
