@@ -42,6 +42,11 @@ function GameplayRoom:new(app)
         ---@cast event EnemyKilledEvent
         --//TODO[javi]: Points received depend on enemy type and current wave
         self.player_points = self.player_points + 1
+        -- Update number of enemies left, and finish wave when done
+        self.enemies_left = self.enemies_left - 1
+        if self.enemies_left == 0 then
+            -- Wave completed, go to the next one
+        end
     end)
 end
 

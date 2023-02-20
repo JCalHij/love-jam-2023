@@ -462,7 +462,6 @@ function NormalZombie:render()
 end
 
 function NormalZombie:destroy()
-    self.room.enemies_left = self.room.enemies_left - 1
     self.state:destroy()
     self.state = nil
     self.room = nil
