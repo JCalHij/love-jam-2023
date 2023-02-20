@@ -7,7 +7,7 @@ GameplayRoom = Object:extend()
 function GameplayRoom:new(app)
     self.app = app
     self.event_layer = app.event_layer
-    self.objects = {}  ---@type table
+
     self.units = {}  ---@type Unit[]
     self.effects = {}  ---@type Effect[]
 
@@ -20,21 +20,44 @@ function GameplayRoom:new(app)
     self.enemies_left = 0
     self.player_points = 0
 
+    self.show_game_ui = false
+    self.show_end_screen_ui = false
 
     self.event_layer:register(self, PlayerLostEvent, function(event)
         ---@cast event PlayerLostEvent
         local duration = 2.0
         self:add_effect(LostScreenEffect(duration))
+        self.show_game_ui = false
+        self.app.timer:after(duration, function()
+            -- Remove all units when duration has elapsed
+            self:clear_units()
+            -- Create buttons to replay or exit when duration has elapsed
+            self.show_end_screen_ui = true
+        end)
     end)
+end
+
+
+function GameplayRoom:clear_units()
+    for _, unit in ipairs(self.units) do
+        unit:destroy()
+    end
+    self.units = {}
+end
+
+
+function GameplayRoom:clear_effects()
+    for _, effect in ipairs(self.effects) do
+        effect:destroy()
+    end
+    self.effects = {}
 end
 
 
 function GameplayRoom:init()
     -- Clear units
-    for _, unit in ipairs(self.units) do
-        unit:destroy()
-    end
-    self.units = {}
+    self:clear_units()
+    self:clear_effects()
 
     -- Spawn first the magic shield, so that it gets rendered first and appears below all other units
     self.magic_shield = self:spawn_unit(MagicShield, Vector2(VirtualWidth/2, VirtualHeight/2))
@@ -45,6 +68,9 @@ function GameplayRoom:init()
         self:spawn_unit(NormalZombie)
         self.enemies_left = self.enemies_left + 1
     end
+
+    self.show_game_ui = true
+    self.show_end_screen_ui = false
 end
 
 
@@ -86,9 +112,22 @@ function GameplayRoom:render()
     end
 
     -- User interface
-    love.graphics.print(string.format("Magic Shield %d / %d", self.magic_shield.hp, self.magic_shield.max_hp), 10, 10)
-    love.graphics.print(string.format("Player points %d", self.player_points), 10, 30)
-    love.graphics.print(string.format("Enemies left %d", self.enemies_left), 10, 50)
+    if self.show_game_ui then
+        love.graphics.print(string.format("Magic Shield %d / %d", self.magic_shield.hp, self.magic_shield.max_hp), 10, 10)
+        love.graphics.print(string.format("Player points %d", self.player_points), 10, 30)
+        love.graphics.print(string.format("Enemies left %d", self.enemies_left), 10, 50)
+    end
+
+    if self.show_end_screen_ui then
+        local repeat_pressed = imgui.button({x=VirtualWidth/3, y=2*VirtualHeight/3, w=150, h=30}, "PLAY AGAIN")
+        if repeat_pressed then
+            self:init()
+        end
+        local exit_pressed = imgui.button({x=2*VirtualWidth/3, y=2*VirtualHeight/3, w=150, h=30}, "EXIT")
+        if exit_pressed then
+            love.event.quit()
+        end
+    end
 end
 
 
