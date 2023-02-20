@@ -388,7 +388,7 @@ function ZombieAttackingState:update(dt)
         self.attack_timer = self.attack_timer + self.zombie.attack_speed
         -- Attack
         target:take_damage(self.zombie.attack_damage, self.zombie)
-        if not target.alive then
+        if not target.alive and self.zombie then
             printf("Target is dead!")
             -- Move towards the target, as current is dead
             self.zombie.target = nil
