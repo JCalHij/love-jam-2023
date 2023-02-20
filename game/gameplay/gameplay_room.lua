@@ -31,9 +31,17 @@ function GameplayRoom:new(app)
         self.app.timer:after(duration, function()
             -- Remove all units when duration has elapsed
             self:clear_units()
+            self.enemies_left = 0
+            self.player_points = 0
             -- Create buttons to replay or exit when duration has elapsed
             self.show_end_screen_ui = true
         end)
+    end)
+
+    self.event_layer:register(self, EnemyKilledEvent, function (event)
+        ---@cast event EnemyKilledEvent
+        --//TODO[javi]: Points received depend on enemy type and current wave
+        self.player_points = self.player_points + 1
     end)
 end
 

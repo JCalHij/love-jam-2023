@@ -152,13 +152,12 @@ function KnightAttackingState:update(dt)
 
     self.attack_timer = self.attack_timer - dt
     if self.attack_timer <= 0 then
-        printf("Knight attacking!")
         -- Reset timer
         self.attack_timer = self.attack_timer + self.knight.attack_speed
         -- Attack
         target:take_damage(self.knight.attack_damage, self.knight)
         if not target.alive then
-            printf("Target is dead!")
+            self.knight.room.event_layer:notify(EnemyKilledEvent(target:class()))
             -- Remove target from list and go to the next one
             table.remove(self.knight.targets, 1)
             if #self.knight.targets > 0 then
