@@ -282,6 +282,7 @@ function Princess:new(room, position)
         collider_radius = 5,
     }
     Princess.super.new(self, room, BasePrincessDef)
+    self.dead = false ---@type boolean Different than "alive" property, signals that the princess has been attacked and the game is done
 end
 
 function Princess:render()
@@ -294,6 +295,10 @@ end
 ---@param attacker Unit
 function Princess:take_damage(damage, attacker)
     -- The Princess unit does not take damage, but it signals the end of the game (lost condition)
+    if not self.dead then
+        self.dead = true
+        self.room:add_effect(LostScreenEffect())
+    end
 end
 
 
