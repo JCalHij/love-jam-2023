@@ -6,6 +6,7 @@ GameplayRoom = Object:extend()
 ---@param app GameApp
 function GameplayRoom:new(app)
     self.app = app
+    self.event_layer = app.event_layer
     self.objects = {}  ---@type table
     self.units = {}  ---@type Unit[]
     self.effects = {}  ---@type Effect[]

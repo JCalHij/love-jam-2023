@@ -8,6 +8,8 @@ GameApp = Object:extend()
 
 
 function GameApp:new()
+    self.event_layer = EventLayer("AppEventLayer", AllEventClasses)
+
     ---@type {[RoomName]: GameplayRoom}
     self.rooms= {
         ["gameplay"] = GameplayRoom(self)
