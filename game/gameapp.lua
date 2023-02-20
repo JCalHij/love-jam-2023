@@ -9,6 +9,8 @@ GameApp = Object:extend()
 
 function GameApp:new()
     self.event_layer = EventLayer("AppEventLayer", AllEventClasses)
+    self.timer = Timer()  ---@type Timer
+    imgui.init()
 
     ---@type {[RoomName]: GameplayRoom}
     self.rooms= {
@@ -20,6 +22,7 @@ end
 
 
 function GameApp:update(dt)
+    self.timer:update(dt)
     self.rooms[self.current_room]:update(dt)
 end
 
