@@ -22,8 +22,9 @@ end
 
 
 function GameApp:update(dt)
-    self.timer:update(dt)
-    self.rooms[self.current_room]:update(dt)
+    local delta_t = input_is_key_held("space") and 5*dt or dt
+    self.timer:update(delta_t)
+    self.rooms[self.current_room]:update(delta_t)
 end
 
 
