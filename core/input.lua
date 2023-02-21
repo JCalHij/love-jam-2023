@@ -492,6 +492,18 @@ function input_mouse_position()
 end
 
 --[[
+Returns the mouse position in current canvas coordinates, as a Vector2.
+]]
+---@return Vec2
+function input_get_local_mouse_position()
+    if not love.graphics.getCanvas() then
+        return MousePos
+    else
+        return screen_to_canvas(MousePos)
+    end
+end
+
+--[[
 Returns the mouse movement for the current frame, as a Vector2.
 ]]
 ---@return Vec2
