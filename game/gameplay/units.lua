@@ -514,6 +514,16 @@ function MagicShield:new(room, position)
         collider_radius = 50,
     }
     MagicShield.super.new(self, room, BaseMagicShieldDef)
+
+    self.modifiers = {
+        -- Max HP
+        max_hp = 0,
+        max_hp_delta = 1,
+    }
+end
+
+function MagicShield:get_max_hp()
+    return self.max_hp + self.modifiers.max_hp
 end
 
 function MagicShield:render()

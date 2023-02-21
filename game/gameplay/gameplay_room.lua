@@ -164,7 +164,7 @@ function GameplayRoom:render()
 
     -- User interface
     if self.show_game_ui then
-        love.graphics.print(string.format("Magic Shield %d / %d", self.magic_shield.hp, self.magic_shield.max_hp), 10, 10)
+        love.graphics.print(string.format("Magic Shield %d / %d", self.magic_shield.hp, self.magic_shield:get_max_hp()), 10, 10)
         love.graphics.print(string.format("Player points %d", self.player_points), 10, 30)
         love.graphics.print(string.format("Enemies left %d", self.enemies_left), 10, 50)
     end
