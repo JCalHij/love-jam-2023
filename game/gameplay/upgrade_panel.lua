@@ -2,7 +2,7 @@
 UpgradePanel = Object:extend()
 
 local UpgradeCosts = {
-    AttackDamage = {1, 2, 3},
+    AttackDamage = {2, 4, 6},
     AttackSpeed = {1, 1, 1, 2, 2, 2, 3, 3, 3},
     MoveSpeed = {1, 1, 1, 1, 1, 2, 2, 2, 3},
 }
@@ -56,6 +56,8 @@ function UpgradePanel:_render_attack_damage()
     local x, y = 50, 50
     imgui.label({x = x, y = y, w = 300, h = 25}, string.format("Knight Attack Damage: %d", self.knight:get_attack_damage()))
 
+    -- Sell
+
     local can_sell = self.delta_num_upgrades.knight_attack_damage > 0
     imgui.set_state(can_sell and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
     if imgui.button({x = x + 300, y = y, w = 25, h = 25}, "-") then
@@ -67,6 +69,8 @@ function UpgradePanel:_render_attack_damage()
         self.knight.modifiers.attack_damage_num_upgrades = self.knight.modifiers.attack_damage_num_upgrades - 1
     end
 
+    -- Buy
+
     imgui.set_state(self:_can_purchase_attack_damage() and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
     if imgui.button({x = x + 325, y = y, w = 25, h = 25}, "+") then
         -- Update player
@@ -77,13 +81,27 @@ function UpgradePanel:_render_attack_damage()
         self.room.player_points = self.room.player_points - UpgradeCosts.AttackDamage[index_to_purchase]
     end
 
+    -- Next cost
+
     imgui.set_state(imgui.GuiState.NORMAL)
+    do
+        local label_rect = {x = x + 375, y = y, w = 25, h = 25}
+        if not self:_max_attack_damage_reached() then
+            local index_to_purchase = self.delta_num_upgrades.knight_attack_damage + self.current_num_upgrades.knight_attack_damage + 1
+            local cost = UpgradeCosts.AttackDamage[index_to_purchase]
+            imgui.label(label_rect, string.format("Next: %d", cost))
+        else
+            imgui.label(label_rect, "MAX RANK")
+        end
+    end
 end
 
 
 function UpgradePanel:_render_attack_speed()
     local x, y = 50, 80
     imgui.label({x = x, y = y, w = 300, h = 25}, string.format("Knight Attack Speed: %.2f", self.knight:get_attack_speed()))
+
+    -- Sell
 
     local can_sell = self.delta_num_upgrades.knight_attack_speed > 0
     imgui.set_state(can_sell and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
@@ -96,6 +114,8 @@ function UpgradePanel:_render_attack_speed()
         self.knight.modifiers.attack_speed_num_upgrades = self.knight.modifiers.attack_speed_num_upgrades - 1
     end
 
+    -- Buy
+
     imgui.set_state(self:_can_purchase_attack_speed() and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
     if imgui.button({x = x + 325, y = y, w = 25, h = 25}, "+") then
         -- Update player
@@ -106,13 +126,27 @@ function UpgradePanel:_render_attack_speed()
         self.room.player_points = self.room.player_points - UpgradeCosts.AttackSpeed[index_to_purchase]
     end
 
+    -- Next cost
+
     imgui.set_state(imgui.GuiState.NORMAL)
+    do
+        local label_rect = {x = x + 375, y = y, w = 25, h = 25}
+        if not self:_max_attack_speed_reached() then
+            local index_to_purchase = self.delta_num_upgrades.knight_attack_speed + self.current_num_upgrades.knight_attack_speed + 1
+            local cost = UpgradeCosts.AttackSpeed[index_to_purchase]
+            imgui.label(label_rect, string.format("Next: %d", cost))
+        else
+            imgui.label(label_rect, "MAX RANK")
+        end
+    end
 end
 
 
 function UpgradePanel:_render_move_speed()
     local x, y = 50, 110
     imgui.label({x = x, y = y, w = 300, h = 25}, string.format("Knight Move Speed: %d", self.knight:get_move_speed()))
+
+    -- Sell
 
     local can_sell = self.delta_num_upgrades.knight_move_speed > 0
     imgui.set_state(can_sell and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
@@ -125,6 +159,8 @@ function UpgradePanel:_render_move_speed()
         self.knight.modifiers.move_speed_num_upgrades = self.knight.modifiers.move_speed_num_upgrades - 1
     end
 
+    -- Buy
+
     imgui.set_state(self:_can_purchase_move_speed() and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
     if imgui.button({x = x + 325, y = y, w = 25, h = 25}, "+") then
         -- Update player
@@ -135,7 +171,19 @@ function UpgradePanel:_render_move_speed()
         self.room.player_points = self.room.player_points - UpgradeCosts.MoveSpeed[index_to_purchase]
     end
 
+    -- Next cost
+
     imgui.set_state(imgui.GuiState.NORMAL)
+    do
+        local label_rect = {x = x + 375, y = y, w = 25, h = 25}
+        if not self:_max_move_speed_reached() then
+            local index_to_purchase = self.delta_num_upgrades.knight_move_speed + self.current_num_upgrades.knight_move_speed + 1
+            local cost = UpgradeCosts.MoveSpeed[index_to_purchase]
+            imgui.label(label_rect, string.format("Next: %d", cost))
+        else
+            imgui.label(label_rect, "MAX RANK")
+        end
+    end
 end
 
 
@@ -157,7 +205,7 @@ end
 
 function UpgradePanel:_can_purchase_attack_damage()
     -- Max upgrade reached
-    if self.delta_num_upgrades.knight_attack_damage + self.current_num_upgrades.knight_attack_damage >= self.max_num_upgrades.knight_attack_damage then
+    if self:_max_attack_damage_reached() then
         return false
     end
     -- Not enough points. No need for bounds checking, as we are not at max upgrade (checked before)
@@ -172,7 +220,7 @@ end
 
 function UpgradePanel:_can_purchase_attack_speed()
     -- Max upgrade reached
-    if self.delta_num_upgrades.knight_attack_speed + self.current_num_upgrades.knight_attack_speed >= self.max_num_upgrades.knight_attack_speed then
+    if self:_max_attack_speed_reached() then
         return false
     end
     -- Not enough points. No need for bounds checking, as we are not at max upgrade (checked before)
@@ -187,7 +235,7 @@ end
 
 function UpgradePanel:_can_purchase_move_speed()
     -- Max upgrade reached
-    if self.delta_num_upgrades.knight_move_speed + self.current_num_upgrades.knight_move_speed >= self.max_num_upgrades.knight_move_speed then
+    if self:_max_move_speed_reached() then
         return false
     end
     -- Not enough points. No need for bounds checking, as we are not at max upgrade (checked before)
@@ -197,6 +245,21 @@ function UpgradePanel:_can_purchase_move_speed()
     end
     -- All OK, can purchase
     return true
+end
+
+
+function UpgradePanel:_max_attack_damage_reached()
+    return self.delta_num_upgrades.knight_attack_damage + self.current_num_upgrades.knight_attack_damage >= self.max_num_upgrades.knight_attack_damage
+end
+
+
+function UpgradePanel:_max_attack_speed_reached()
+    return self.delta_num_upgrades.knight_attack_speed + self.current_num_upgrades.knight_attack_speed >= self.max_num_upgrades.knight_attack_speed
+end
+
+
+function UpgradePanel:_max_move_speed_reached()
+    return self.delta_num_upgrades.knight_move_speed + self.current_num_upgrades.knight_move_speed >= self.max_num_upgrades.knight_move_speed
 end
 
 
