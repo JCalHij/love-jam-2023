@@ -531,17 +531,27 @@ end
 ---@field amount integer
 
 
----@class EnemySpawner: Unit
+---@class EnemySpawner: Object
 ---@operator call(): EnemySpawner
-EnemySpawner = Unit:extend()
+EnemySpawner = Object:extend()
 
 ---@param room GameplayRoom
 ---@param wave_data WaveData[]
 function EnemySpawner:new(room, wave_data)
     self.room = room
-    self.wave_data = table.deepcopy(wave_data)
+    self.alive = true
+    self.wave_data = {}
     self.spawn_delta = 0.5
     self.elapsed_time = 0
+
+    -- Deep-copy of depth 1 from wave data, so that we can modify the amounts for each wave without modifying the original data
+    for i, wave in ipairs(wave_data) do
+        local copy_wave = {}
+        for k, v in pairs(wave) do
+            copy_wave[k] = v
+        end
+        table.insert(self.wave_data, copy_wave)
+    end
 end
 
 function EnemySpawner:update(dt)
@@ -560,7 +570,7 @@ function EnemySpawner:update(dt)
         wave.amount = wave.amount - 1
         if wave.amount <= 0 then
             -- Completed spawn of wave.class enemies
-            table.remove(self.wave_data[index])
+            table.remove(self.wave_data, index)
             if #self.wave_data == 0 then
                 -- Completed spawn of all enemies
                 self.alive = false
@@ -568,6 +578,8 @@ function EnemySpawner:update(dt)
         end
     end
 end
+
+function EnemySpawner:render() end
 
 function EnemySpawner:destroy()
     self.room = nil
