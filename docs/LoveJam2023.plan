@@ -4,9 +4,9 @@
   "BoardIndex": 0,
   "BoardCount": 1,
   "AutoSave": false,
-  "Pan.X": -282.15106201171875,
-  "Pan.Y": -599.4156494140625,
-  "ZoomLevel": 6,
+  "Pan.X": -299.352294921875,
+  "Pan.Y": -680.2861938476562,
+  "ZoomLevel": 5,
   "TaskTransparency": 5,
   "OutlineTasks": true,
   "BracketSubtasks": true,
@@ -215,7 +215,7 @@
       "BoardIndex": 0,
       "Position.X": 144,
       "Position.Y": 576,
-      "Checkbox.Checked": false,
+      "Checkbox.Checked": true,
       "Progression.Current": 0,
       "Progression.Max": 0,
       "Description": "Points for killing enemies",
@@ -227,7 +227,7 @@
       "BoardIndex": 0,
       "Position.X": 144,
       "Position.Y": 592,
-      "Checkbox.Checked": false,
+      "Checkbox.Checked": true,
       "Progression.Current": 0,
       "Progression.Max": 0,
       "Description": "Enemy wave system",
@@ -238,7 +238,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 144,
-      "Position.Y": 624,
+      "Position.Y": 656,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -322,7 +322,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 144,
-      "Position.Y": 720,
+      "Position.Y": 608,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -334,7 +334,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 144,
-      "Position.Y": 736,
+      "Position.Y": 752,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -346,7 +346,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 160,
-      "Position.Y": 752,
+      "Position.Y": 768,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -358,7 +358,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 160,
-      "Position.Y": 768,
+      "Position.Y": 784,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -370,7 +370,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 160,
-      "Position.Y": 784,
+      "Position.Y": 800,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -922,7 +922,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 160,
-      "Position.Y": 640,
+      "Position.Y": 672,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -934,7 +934,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 160,
-      "Position.Y": 656,
+      "Position.Y": 688,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -946,7 +946,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 160,
-      "Position.Y": 672,
+      "Position.Y": 704,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -958,7 +958,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 160,
-      "Position.Y": 688,
+      "Position.Y": 720,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -971,7 +971,7 @@
     {
       "BoardIndex": 0,
       "Position.X": 160,
-      "Position.Y": 704,
+      "Position.Y": 736,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
@@ -1055,14 +1055,26 @@
     {
       "BoardIndex": 0,
       "Position.X": 144,
-      "Position.Y": 608,
+      "Position.Y": 624,
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
-      "Description": "Player stat modifiers",
+      "Description": "Knight stat modifiers",
       "Selected": false,
       "TaskType.CurrentChoice": 0,
       "CreationTime": "Feb 20 2023 10:49:44"
+    }, 
+    {
+      "BoardIndex": 0,
+      "Position.X": 144,
+      "Position.Y": 640,
+      "Checkbox.Checked": false,
+      "Progression.Current": 0,
+      "Progression.Max": 0,
+      "Description": "Magic shield stat modifiers",
+      "Selected": false,
+      "TaskType.CurrentChoice": 0,
+      "CreationTime": "Feb 21 2023 08:11:25"
     }
   ]
 }
