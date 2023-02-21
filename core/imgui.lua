@@ -1151,7 +1151,7 @@ function imgui.button(bounds, text)
 
     -- Logic
     if state ~= imgui.GuiState.DISABLED and not g_state.locked then
-        local mouse_pos = input_mouse_position()
+        local mouse_pos = input_get_local_mouse_position()
         if collision_point_rect(mouse_pos, bounds) then
             if input_is_mouse_pressed(LEFT_MOUSE_BUTTON) then
                 state = imgui.GuiState.PRESSED
@@ -1238,7 +1238,7 @@ function imgui.label_button(bounds, text)
 
     -- Logic
     if state ~= imgui.GuiState.DISABLED and not g_state.locked then
-        local mouse_pos = input_mouse_position()
+        local mouse_pos = input_get_local_mouse_position()
         if collision_point_rect(mouse_pos, buttonbounds) then
             if input_is_mouse_pressed(LEFT_MOUSE_BUTTON) then
                 state = imgui.GuiState.PRESSED
@@ -1293,7 +1293,7 @@ function imgui.toggle(bounds, text, active)
 
     -- Logic
     if state ~= imgui.GuiState.DISABLED and not g_state.locked then
-        local mouse_pos = input_mouse_position()
+        local mouse_pos = input_get_local_mouse_position()
         if collision_point_rect(mouse_pos, bounds) then
             if input_is_mouse_held(LEFT_MOUSE_BUTTON) then
                 state = imgui.GuiState.PRESSED
@@ -1442,7 +1442,7 @@ function imgui.checkbox(bounds, text, checked)
     end
     -- Logic
     if state ~= imgui.GuiState.DISABLED and not g_state.locked then
-        local mouse_pos = input_mouse_position()
+        local mouse_pos = input_get_local_mouse_position()
         local total_bounds = {
             x = text_alignment == imgui.GuiTextAlignment.LEFT and textbounds.x or bounds.x,
             y = bounds.y,
@@ -1539,7 +1539,7 @@ function imgui.combobox(bounds, texts, active_idx)
 
     -- Logic
     if state ~= imgui.GuiState.DISABLED and not g_state.locked and #texts > 1 then
-        local mouse_pos = input_mouse_position()
+        local mouse_pos = input_get_local_mouse_position()
         if collision_point_rect(mouse_pos, combobox)  or collision_point_rect(mouse_pos, selector) then
             if input_is_mouse_pressed(LEFT_MOUSE_BUTTON) then
                 -- Cycle between labels
@@ -1645,7 +1645,7 @@ function imgui.dropdown(bounds, texts, active_idx, editable)
 
     -- Logic
     if state ~= imgui.GuiState.DISABLED and (editable or not g_state.locked) and #texts > 1 then
-        local mouse_pos = input_mouse_position()
+        local mouse_pos = input_get_local_mouse_position()
 
         if editable then
             state = imgui.GuiState.PRESSED
@@ -1786,7 +1786,7 @@ function imgui.spinner(bounds, text, value, min, max, editable)
 
     -- Logic
     if state ~= imgui.GuiState.DISABLED and not g_state.locked then
-        local mouse_pos = input_mouse_position()
+        local mouse_pos = input_get_local_mouse_position()
         if collision_point_rect(mouse_pos, bounds) then
             if input_is_mouse_held(LEFT_MOUSE_BUTTON) then
                 state = imgui.GuiState.PRESSED
@@ -1853,7 +1853,7 @@ function imgui.valuebox(bounds, text, value, min, max, editable)
 
     -- Logic
     if state ~= imgui.GuiState.DISABLED and not g_state.locked then
-        local mouse_pos = input_mouse_position()
+        local mouse_pos = input_get_local_mouse_position()
         local value_changed = false
 
         if editable then
@@ -1965,7 +1965,7 @@ function imgui.textbox(bounds, text, editable)
 
     -- Logic
     if state ~= imgui.GuiState.DISABLED and not g_state.locked then
-        local mouse_pos = input_mouse_position()
+        local mouse_pos = input_get_local_mouse_position()
 
         if editable then
             state = imgui.GuiState.PRESSED
@@ -2049,7 +2049,7 @@ function imgui.dummy_rect(bounds, text)
 
     -- Logic
     if state  ~= imgui.GuiState.DISABLED and not g_state.locked then
-        local mouse_pos = input_mouse_position()
+        local mouse_pos = input_get_local_mouse_position()
         if collision_point_rect(mouse_pos, bounds) then
             if input_is_mouse_held(LEFT_MOUSE_BUTTON) then
                 state = imgui.GuiState.PRESSED
@@ -2201,7 +2201,7 @@ function imgui.scroll_panel(bounds, text, content, scroll)
 
     -- Logic
     if state ~= imgui.GuiState.DISABLED and not g_state.locked then
-        local mouse_pos = input_mouse_position()
+        local mouse_pos = input_get_local_mouse_position()
 
         if collision_point_rect(mouse_pos, scroll_bounds) then
             if input_is_mouse_held(LEFT_MOUSE_BUTTON) then
@@ -2365,7 +2365,7 @@ function imgui.scrollbar(bounds, value, min, max)
 
     -- Logic
     if state ~= imgui.GuiState.DISABLED and not g_state.locked then
-        local mouse_pos = input_mouse_position()
+        local mouse_pos = input_get_local_mouse_position()
 
         if collision_point_rect(mouse_pos, bounds) then
             state = imgui.GuiState.FOCUSED
@@ -2464,7 +2464,7 @@ function imgui.textbox_multiline(bounds, text, editable)
 
     -- Logic
     if state ~= imgui.GuiState.DISABLED and not g_state.locked then
-        local mouse_pos = input_mouse_position()
+        local mouse_pos = input_get_local_mouse_position()
 
         if editable then
             state = imgui.GuiState.PRESSED
