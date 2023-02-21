@@ -62,3 +62,34 @@ function LostScreenEffect:destroy()
     self.unit = nil
     self.alive = false
 end
+
+
+
+---@class WonScreenEffect: Effect
+---@operator call(): WonScreenEffect
+WonScreenEffect = Effect:extend()
+
+
+function WonScreenEffect:new(duration)
+    self.alive = true
+    self.alpha = 0.0
+    self.target_alpha = 1.0
+    self.fade_in_speed = self.target_alpha / duration
+end
+
+function WonScreenEffect:update(dt)
+    self.alpha = math.min(self.alpha + self.fade_in_speed*dt, self.target_alpha)
+end
+
+function WonScreenEffect:render()
+    SetDrawColor({0, 0, 0, self.alpha})
+    DrawRectangle({x=0, y=0, w=VirtualWidth, h=VirtualHeight})
+    SetDrawColor({1, 1, 1, self.alpha})
+    love.graphics.printf("YOU WON, CONGRATULATIONS!", 0, VirtualHeight/2, VirtualWidth, "center")
+    SetDrawColor({1, 1, 1, 1})
+end
+
+function WonScreenEffect:destroy()
+    self.unit = nil
+    self.alive = false
+end

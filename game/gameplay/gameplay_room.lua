@@ -58,6 +58,17 @@ function GameplayRoom:new(app)
             self.current_wave = self.current_wave + 1
             if self.current_wave > #self.waves then
                 -- Player won
+                local duration = 2.0
+                self:add_effect(WonScreenEffect(duration))
+                self.show_game_ui = false
+                self.app.timer:after(duration, function()
+                    -- Remove all units when duration has elapsed
+                    self:clear_units()
+                    self.enemies_left = 0
+                    self.player_points = 0
+                    -- Create buttons to replay or exit when duration has elapsed
+                    self.show_end_screen_ui = true
+                end)
             else
                 -- Go to the next wave
                 self.app.timer:after(2.0, function()
