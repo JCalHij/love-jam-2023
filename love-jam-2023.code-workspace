@@ -24,7 +24,7 @@
 			"scriptRoots": [
 			  "${workspaceFolder:GAME}"
 			],
-			"cwd": "${workspaceFolder}"
+			"cwd": "${workspaceFolder:GAME}"
 		  }
 		]
 	},
