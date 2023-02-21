@@ -219,13 +219,13 @@ function Knight:new(room, position)
     Knight.super.new(self, room, BaseKnightDef)
     self.modifiers = {
         -- Attack damage
-        attack_damage = 0,
+        attack_damage_num_upgrades = 0,
         attack_damage_delta = 1,
         -- Attack speed
-        attack_speed = 0.0,
+        attack_speed_num_upgrades = 0,
         attack_speed_delta = -0.05,
         -- Move speed
-        move_speed = 0.0,
+        move_speed_num_upgrades = 0,
         move_speed_delta = 5,
     }
 
@@ -235,15 +235,15 @@ function Knight:new(room, position)
 end
 
 function Knight:get_attack_damage()
-    return self.attack_damage + self.modifiers.attack_damage
+    return self.attack_damage + self.modifiers.attack_damage_delta*self.modifiers.attack_damage_num_upgrades
 end
 
 function Knight:get_attack_speed()
-    return self.attack_speed + self.modifiers.attack_speed
+    return self.attack_speed + self.modifiers.attack_speed_delta*self.modifiers.attack_speed_num_upgrades
 end
 
 function Knight:get_move_speed()
-    return self.move_speed + self.modifiers.move_speed
+    return self.move_speed + self.modifiers.move_speed_delta*self.modifiers.move_speed_num_upgrades
 end
 
 function Knight:update(dt)
