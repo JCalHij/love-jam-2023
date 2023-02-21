@@ -1153,7 +1153,7 @@ function imgui.button(bounds, text)
     if state ~= imgui.GuiState.DISABLED and not g_state.locked then
         local mouse_pos = input_get_local_mouse_position()
         if collision_point_rect(mouse_pos, bounds) then
-            if input_is_mouse_pressed(LEFT_MOUSE_BUTTON) then
+            if input_is_mouse_held(LEFT_MOUSE_BUTTON) then
                 state = imgui.GuiState.PRESSED
             else
                 state = imgui.GuiState.FOCUSED
