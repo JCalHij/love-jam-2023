@@ -27,7 +27,7 @@ function GameplayRoom:new(app)
     self.waves = {
         -- Level 1
         {
-            { class =  NormalZombie, amount = 5 },
+            { class =  NormalZombie, amount = 2 },
         },
     }
     self.current_wave = 1
@@ -55,6 +55,15 @@ function GameplayRoom:new(app)
         self.enemies_left = self.enemies_left - 1
         if self.enemies_left == 0 then
             -- Wave completed, go to the next one
+            self.current_wave = self.current_wave + 1
+            if self.current_wave > #self.waves then
+                -- Player won
+            else
+                -- Go to the next wave
+                self.app.timer:after(2.0, function()
+                    self:new_wave()
+                end)
+            end
         end
     end)
 
