@@ -124,7 +124,7 @@ function KnightMovingState:update(dt)
     end
 
     -- Move towards the target
-    local delta_pos = move_direction:normalizeInplace() * self.knight.move_speed * dt
+    local delta_pos = move_direction:normalizeInplace() * self.knight:get_move_speed() * dt
     self.knight.pos = self.knight.pos + delta_pos
 end
 
@@ -137,7 +137,7 @@ end
 ---@param knight Knight
 function KnightAttackingState:new(knight)
     self.knight = knight
-    self.attack_timer = knight.attack_speed/2
+    self.attack_timer = knight:get_attack_speed()/2
 end
 
 function KnightAttackingState:update(dt)
@@ -153,9 +153,9 @@ function KnightAttackingState:update(dt)
     self.attack_timer = self.attack_timer - dt
     if self.attack_timer <= 0 then
         -- Reset timer
-        self.attack_timer = self.attack_timer + self.knight.attack_speed
+        self.attack_timer = self.attack_timer + self.knight:get_attack_speed()
         -- Attack
-        target:take_damage(self.knight.attack_damage, self.knight)
+        target:take_damage(self.knight:get_attack_damage(), self.knight)
         if not target.alive then
             self.knight.room.event_layer:notify(EnemyKilledEvent(target:class()))
             -- Remove target from list and go to the next one
@@ -217,10 +217,30 @@ function Knight:new(room, position)
         collider_radius = 5,
     }
     Knight.super.new(self, room, BaseKnightDef)
+    self.modifiers = {
+        attack_damage = 0,
+        attack_damage_delta = 1,
+        attack_speed = 0.0,
+        attack_speed_delta = -0.05,
+        move_speed = 0.0,
+        move_speed_delta = 5,
+    }
 
     self.targets = {}  ---@type Unit[]
     self.state = KnightIdleState(self)  ---@type KnightState
     self.knockback_vector = Vector2(0, 0)
+end
+
+function Knight:get_attack_damage()
+    return self.attack_damage + self.modifiers.attack_damage
+end
+
+function Knight:get_attack_speed()
+    return self.attack_speed + self.modifiers.attack_speed
+end
+
+function Knight:get_move_speed()
+    return self.move_speed + self.modifiers.move_speed
 end
 
 function Knight:update(dt)
