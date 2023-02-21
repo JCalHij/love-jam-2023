@@ -24,9 +24,15 @@ function GameplayRoom:new(app)
     self.show_end_screen_ui = false
     self.show_upgrade_ui = false
 
+    self.upgrade_panel = nil  ---@type UpgradePanel
+
     ---@type WaveData[]
     self.waves = {
         -- Level 1
+        {
+            { class =  NormalZombie, amount = 1 },
+        },
+        -- Level 2
         {
             { class =  NormalZombie, amount = 2 },
         },
@@ -54,14 +60,14 @@ function GameplayRoom:new(app)
         self.player_points = self.player_points + 1
         -- Update number of enemies left, and finish wave when done
         self.enemies_left = self.enemies_left - 1
-        if self.enemies_left == 0 then
+        if self.enemies_left <= 0 then
             -- Wave completed, go to the next one
             self.current_wave = self.current_wave + 1
+            self.show_game_ui = false
             if self.current_wave > #self.waves then
                 -- Player won
                 local duration = 2.0
                 self:add_effect(WonScreenEffect(duration))
-                self.show_game_ui = false
                 self.app.timer:after(duration, function()
                     -- Remove all units when duration has elapsed
                     self:clear_units()
@@ -71,10 +77,8 @@ function GameplayRoom:new(app)
                     self.show_end_screen_ui = true
                 end)
             else
-                -- Go to the next wave
-                self.app.timer:after(2.0, function()
-                    self:new_wave()
-                end)
+                self.show_upgrade_ui = true
+                self.upgrade_panel = UpgradePanel(self)
             end
         end
     end)
@@ -82,6 +86,16 @@ function GameplayRoom:new(app)
     self.event_layer:register(self, EnemySpawnedEvent, function (event)
         ---@cast event EnemySpawnedEvent
         self.enemies_left = self.enemies_left + 1
+    end)
+
+    self.event_layer:register(self, UpgradeRoomFinishedEvent, function (event)
+        ---@cast event UpgradeRoomFinishedEvent
+        self.upgrade_panel:destroy()
+        self.upgrade_panel = nil
+        -- Go to the next wave
+        self.app.timer:after(2.0, function()
+            self:new_wave()
+        end)
     end)
 end
 
@@ -122,6 +136,7 @@ end
 
 
 function GameplayRoom:new_wave()
+    self.show_game_ui = true
     assert(self.waves[self.current_wave], string.format("No wave data exists for wave number %d", self.current_wave))
     table.insert(self.units, EnemySpawner(self, self.waves[self.current_wave]))
 end
@@ -218,6 +233,9 @@ end
 
 
 function GameplayRoom:upgrade_ui()
+    if self.upgrade_panel then
+        self.upgrade_panel:render()
+    end
 end
 
 
