@@ -23,6 +23,15 @@ function GameplayRoom:new(app)
     self.show_game_ui = false
     self.show_end_screen_ui = false
 
+    ---@type WaveData[]
+    self.waves = {
+        -- Level 1
+        {
+            { class =  NormalZombie, amount = 5 },
+        },
+    }
+    self.current_wave = 1
+
     self.event_layer:register(self, PlayerLostEvent, function(event)
         ---@cast event PlayerLostEvent
         local duration = 2.0
@@ -77,13 +86,16 @@ function GameplayRoom:init()
     self.knight = self:spawn_unit(Knight, Vector2(100, 100))
     self.princess = self:spawn_unit(Princess, Vector2(VirtualWidth/2, VirtualHeight/2))
 
-    for i=1,5 do
-        self:spawn_unit(NormalZombie)
-        self.enemies_left = self.enemies_left + 1
-    end
-
     self.show_game_ui = true
     self.show_end_screen_ui = false
+
+    self:new_wave()
+end
+
+
+function GameplayRoom:new_wave()
+    assert(self.waves[self.current_wave], string.format("No wave data exists for wave number %d", self.current_wave))
+    table.insert(self.units, EnemySpawner(self, self.waves[self.current_wave]))
 end
 
 
