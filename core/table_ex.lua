@@ -203,8 +203,9 @@ Creates a deep copy of table `t`.
 
 NOTE: Metatables do not get copied.
 ]]
----@param t table
----@return table
+---@generic T
+---@param t T
+---@return T
 function table.deepcopy(t)
     local c = {}
     for k, v in pairs(t) do
