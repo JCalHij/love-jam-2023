@@ -1,6 +1,12 @@
 ---@class UpgradePanel: Object
 UpgradePanel = Object:extend()
 
+local UpgradeCosts = {
+    AttackDamage = {1, 2, 3},
+    AttackSpeed = {1, 1, 1, 2, 2, 2, 3, 3, 3},
+    MoveSpeed = {1, 1, 1, 1, 1, 2, 2, 2, 3},
+}
+
 
 ---@param room GameplayRoom
 function UpgradePanel:new(room)
@@ -24,9 +30,9 @@ function UpgradePanel:new(room)
 
     -- Maximum amount of upgrades for each parameter
     self.max_num_upgrades = {
-        knight_attack_damage = 3,
-        knight_attack_speed = 10,
-        knight_move_speed = 10,
+        knight_attack_damage = #UpgradeCosts.AttackDamage,
+        knight_attack_speed = #UpgradeCosts.AttackSpeed,
+        knight_move_speed = #UpgradeCosts.MoveSpeed,
     }
 
     self.buy_text = "BUY"
@@ -41,6 +47,7 @@ function UpgradePanel:render()
     self:_render_attack_speed()
     self:_render_move_speed()
 
+    self:_player_points()
     self:_buy_button()
 end
 
@@ -52,15 +59,22 @@ function UpgradePanel:_render_attack_damage()
     local can_sell = self.delta_num_upgrades.knight_attack_damage > 0
     imgui.set_state(can_sell and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
     if imgui.button({x = x + 300, y = y, w = 25, h = 25}, "-") then
+        -- Update points
+        local index_to_recover = self.delta_num_upgrades.knight_attack_damage + self.current_num_upgrades.knight_attack_damage
+        self.room.player_points = self.room.player_points + UpgradeCosts.AttackDamage[index_to_recover]
+        -- Update player
         self.delta_num_upgrades.knight_attack_damage = self.delta_num_upgrades.knight_attack_damage - 1
         self.knight.modifiers.attack_damage_num_upgrades = self.knight.modifiers.attack_damage_num_upgrades - 1
     end
 
-    local can_buy = self.delta_num_upgrades.knight_attack_damage + self.current_num_upgrades.knight_attack_damage < self.max_num_upgrades.knight_attack_damage
-    imgui.set_state(can_buy and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
+    imgui.set_state(self:_can_purchase_attack_damage() and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
     if imgui.button({x = x + 325, y = y, w = 25, h = 25}, "+") then
+        -- Update player
         self.delta_num_upgrades.knight_attack_damage = self.delta_num_upgrades.knight_attack_damage + 1
         self.knight.modifiers.attack_damage_num_upgrades = self.knight.modifiers.attack_damage_num_upgrades + 1
+        -- Update points
+        local index_to_purchase = self.delta_num_upgrades.knight_attack_damage + self.current_num_upgrades.knight_attack_damage
+        self.room.player_points = self.room.player_points - UpgradeCosts.AttackDamage[index_to_purchase]
     end
 
     imgui.set_state(imgui.GuiState.NORMAL)
@@ -74,15 +88,22 @@ function UpgradePanel:_render_attack_speed()
     local can_sell = self.delta_num_upgrades.knight_attack_speed > 0
     imgui.set_state(can_sell and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
     if imgui.button({x = x + 300, y = y, w = 25, h = 25}, "-") then
+        -- Update points
+        local index_to_recover = self.delta_num_upgrades.knight_attack_speed + self.current_num_upgrades.knight_attack_speed
+        self.room.player_points = self.room.player_points + UpgradeCosts.AttackSpeed[index_to_recover]
+        -- Update player
         self.delta_num_upgrades.knight_attack_speed = self.delta_num_upgrades.knight_attack_speed - 1
         self.knight.modifiers.attack_speed_num_upgrades = self.knight.modifiers.attack_speed_num_upgrades - 1
     end
 
-    local can_buy = self.delta_num_upgrades.knight_attack_speed + self.current_num_upgrades.knight_attack_speed < self.max_num_upgrades.knight_attack_speed
-    imgui.set_state(can_buy and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
+    imgui.set_state(self:_can_purchase_attack_speed() and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
     if imgui.button({x = x + 325, y = y, w = 25, h = 25}, "+") then
+        -- Update player
         self.delta_num_upgrades.knight_attack_speed = self.delta_num_upgrades.knight_attack_speed + 1
         self.knight.modifiers.attack_speed_num_upgrades = self.knight.modifiers.attack_speed_num_upgrades + 1
+        -- Update points
+        local index_to_purchase = self.delta_num_upgrades.knight_attack_speed + self.current_num_upgrades.knight_attack_speed
+        self.room.player_points = self.room.player_points - UpgradeCosts.AttackSpeed[index_to_purchase]
     end
 
     imgui.set_state(imgui.GuiState.NORMAL)
@@ -96,18 +117,30 @@ function UpgradePanel:_render_move_speed()
     local can_sell = self.delta_num_upgrades.knight_move_speed > 0
     imgui.set_state(can_sell and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
     if imgui.button({x = x + 300, y = y, w = 25, h = 25}, "-") then
+        -- Update points
+        local index_to_recover = self.delta_num_upgrades.knight_move_speed + self.current_num_upgrades.knight_move_speed
+        self.room.player_points = self.room.player_points + UpgradeCosts.MoveSpeed[index_to_recover]
+        -- Update player
         self.delta_num_upgrades.knight_move_speed = self.delta_num_upgrades.knight_move_speed - 1
         self.knight.modifiers.move_speed_num_upgrades = self.knight.modifiers.move_speed_num_upgrades - 1
     end
 
-    local can_buy = self.delta_num_upgrades.knight_move_speed + self.current_num_upgrades.knight_move_speed < self.max_num_upgrades.knight_move_speed
-    imgui.set_state(can_buy and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
+    imgui.set_state(self:_can_purchase_move_speed() and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
     if imgui.button({x = x + 325, y = y, w = 25, h = 25}, "+") then
+        -- Update player
         self.delta_num_upgrades.knight_move_speed = self.delta_num_upgrades.knight_move_speed + 1
         self.knight.modifiers.move_speed_num_upgrades = self.knight.modifiers.move_speed_num_upgrades + 1
+        -- Update points
+        local index_to_purchase = self.delta_num_upgrades.knight_move_speed + self.current_num_upgrades.knight_move_speed + 1
+        self.room.player_points = self.room.player_points - UpgradeCosts.MoveSpeed[index_to_purchase]
     end
 
     imgui.set_state(imgui.GuiState.NORMAL)
+end
+
+
+function UpgradePanel:_player_points()
+    imgui.label({x = (VirtualWidth - self.buy_text_width) / 2, y = VirtualHeight - 60 - 120, w = 2*self.buy_text_width, h = 30}, string.format("%d", self.room.player_points))
 end
 
 
@@ -119,6 +152,51 @@ function UpgradePanel:_buy_button()
         self.room.event_layer:notify(UpgradeRoomFinishedEvent())
     end
     imgui.set_style("button", "text_alignment", alignment_cache)
+end
+
+
+function UpgradePanel:_can_purchase_attack_damage()
+    -- Max upgrade reached
+    if self.delta_num_upgrades.knight_attack_damage + self.current_num_upgrades.knight_attack_damage >= self.max_num_upgrades.knight_attack_damage then
+        return false
+    end
+    -- Not enough points. No need for bounds checking, as we are not at max upgrade (checked before)
+    local index_to_purchase = self.delta_num_upgrades.knight_attack_damage + self.current_num_upgrades.knight_attack_damage + 1
+    if self.room.player_points < UpgradeCosts.AttackDamage[index_to_purchase] then
+        return false
+    end
+    -- All OK, can purchase
+    return true
+end
+
+
+function UpgradePanel:_can_purchase_attack_speed()
+    -- Max upgrade reached
+    if self.delta_num_upgrades.knight_attack_speed + self.current_num_upgrades.knight_attack_speed >= self.max_num_upgrades.knight_attack_speed then
+        return false
+    end
+    -- Not enough points. No need for bounds checking, as we are not at max upgrade (checked before)
+    local index_to_purchase = self.delta_num_upgrades.knight_attack_speed + self.current_num_upgrades.knight_attack_speed + 1
+    if self.room.player_points < UpgradeCosts.AttackSpeed[index_to_purchase] then
+        return false
+    end
+    -- All OK, can purchase
+    return true
+end
+
+
+function UpgradePanel:_can_purchase_move_speed()
+    -- Max upgrade reached
+    if self.delta_num_upgrades.knight_move_speed + self.current_num_upgrades.knight_move_speed >= self.max_num_upgrades.knight_move_speed then
+        return false
+    end
+    -- Not enough points. No need for bounds checking, as we are not at max upgrade (checked before)
+    local index_to_purchase = self.delta_num_upgrades.knight_move_speed + self.current_num_upgrades.knight_move_speed + 1
+    if self.room.player_points < UpgradeCosts.MoveSpeed[index_to_purchase] then
+        return false
+    end
+    -- All OK, can purchase
+    return true
 end
 
 
