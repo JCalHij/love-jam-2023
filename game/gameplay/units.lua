@@ -218,10 +218,13 @@ function Knight:new(room, position)
     }
     Knight.super.new(self, room, BaseKnightDef)
     self.modifiers = {
+        -- Attack damage
         attack_damage = 0,
         attack_damage_delta = 1,
+        -- Attack speed
         attack_speed = 0.0,
         attack_speed_delta = -0.05,
+        -- Move speed
         move_speed = 0.0,
         move_speed_delta = 5,
     }
