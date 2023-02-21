@@ -22,6 +22,7 @@ function GameplayRoom:new(app)
 
     self.show_game_ui = false
     self.show_end_screen_ui = false
+    self.show_upgrade_ui = false
 
     ---@type WaveData[]
     self.waves = {
@@ -113,6 +114,7 @@ function GameplayRoom:init()
 
     self.show_game_ui = true
     self.show_end_screen_ui = false
+    self.show_upgrade_ui = false
 
     self.current_wave = 1
     self:new_wave()
@@ -164,20 +166,15 @@ function GameplayRoom:render()
 
     -- User interface
     if self.show_game_ui then
-        love.graphics.print(string.format("Magic Shield %d / %d", self.magic_shield.hp, self.magic_shield:get_max_hp()), 10, 10)
-        love.graphics.print(string.format("Player points %d", self.player_points), 10, 30)
-        love.graphics.print(string.format("Enemies left %d", self.enemies_left), 10, 50)
+        self:game_ui()
+    end
+
+    if self.show_upgrade_ui then
+        self:upgrade_ui()
     end
 
     if self.show_end_screen_ui then
-        local repeat_pressed = imgui.button({x=VirtualWidth/3, y=2*VirtualHeight/3, w=150, h=30}, "PLAY AGAIN")
-        if repeat_pressed then
-            self:init()
-        end
-        local exit_pressed = imgui.button({x=2*VirtualWidth/3, y=2*VirtualHeight/3, w=150, h=30}, "EXIT")
-        if exit_pressed then
-            love.event.quit()
-        end
+        self:end_screen_ui()
     end
 end
 
@@ -210,4 +207,27 @@ function GameplayRoom:filter_units(fn)
         end
     end
     return units
+end
+
+
+function GameplayRoom:game_ui()
+    love.graphics.print(string.format("Magic Shield %d / %d", self.magic_shield.hp, self.magic_shield:get_max_hp()), 10, 10)
+    love.graphics.print(string.format("Player points %d", self.player_points), 10, 30)
+    love.graphics.print(string.format("Enemies left %d", self.enemies_left), 10, 50)
+end
+
+
+function GameplayRoom:upgrade_ui()
+end
+
+
+function GameplayRoom:end_screen_ui()
+    local repeat_pressed = imgui.button({x=VirtualWidth/3, y=2*VirtualHeight/3, w=150, h=30}, "PLAY AGAIN")
+    if repeat_pressed then
+        self:init()
+    end
+    local exit_pressed = imgui.button({x=2*VirtualWidth/3, y=2*VirtualHeight/3, w=150, h=30}, "EXIT")
+    if exit_pressed then
+        love.event.quit()
+    end
 end
