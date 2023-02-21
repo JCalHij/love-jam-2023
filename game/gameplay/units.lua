@@ -522,3 +522,54 @@ function MagicShield:take_damage(damage, attacker)
         end
     end
 end
+
+
+
+---------------------------------------------------------------------------------
+---@class WaveData
+---@field class table
+---@field amount integer
+
+
+---@class EnemySpawner: Unit
+---@operator call(): EnemySpawner
+EnemySpawner = Unit:extend()
+
+---@param room GameplayRoom
+---@param wave_data WaveData[]
+function EnemySpawner:new(room, wave_data)
+    self.room = room
+    self.wave_data = table.deepcopy(wave_data)
+    self.spawn_delta = 0.5
+    self.elapsed_time = 0
+end
+
+function EnemySpawner:update(dt)
+    if not self.alive then return end
+
+    self.elapsed_time = self.elapsed_time + dt
+    if self.elapsed_time >= self.spawn_delta then
+        self.elapsed_time = self.elapsed_time - self.spawn_delta
+        -- Select enemy class to spawn and their position
+        local index = math.random(1, #self.wave_data)
+        local wave = self.wave_data[index]
+        ---@type Vec2
+        local position = Vector2(VirtualWidth/2, VirtualHeight/2) + Vector2.randomDirection(VirtualWidth/2, VirtualWidth/2)
+        self.room:spawn_unit(wave.class, position)
+        -- Update wave data
+        wave.amount = wave.amount - 1
+        if wave.amount <= 0 then
+            -- Completed spawn of wave.class enemies
+            table.remove(self.wave_data[index])
+            if #self.wave_data == 0 then
+                -- Completed spawn of all enemies
+                self.alive = false
+            end
+        end
+    end
+end
+
+function EnemySpawner:destroy()
+    self.room = nil
+    self.wave_data = nil
+end
