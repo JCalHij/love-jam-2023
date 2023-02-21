@@ -114,6 +114,7 @@ function GameplayRoom:init()
     self.show_game_ui = true
     self.show_end_screen_ui = false
 
+    self.current_wave = 1
     self:new_wave()
 end
 
