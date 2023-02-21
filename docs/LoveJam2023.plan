@@ -323,7 +323,7 @@
       "BoardIndex": 0,
       "Position.X": 144,
       "Position.Y": 608,
-      "Checkbox.Checked": false,
+      "Checkbox.Checked": true,
       "Progression.Current": 0,
       "Progression.Max": 0,
       "Description": "Player won screen",
