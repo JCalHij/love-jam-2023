@@ -566,6 +566,7 @@ function EnemySpawner:update(dt)
         ---@type Vec2
         local position = Vector2(VirtualWidth/2, VirtualHeight/2) + Vector2.randomDirection(VirtualWidth/2, VirtualWidth/2)
         self.room:spawn_unit(wave.class, position)
+        self.room.event_layer:notify(EnemySpawnedEvent(wave.class))
         -- Update wave data
         wave.amount = wave.amount - 1
         if wave.amount <= 0 then

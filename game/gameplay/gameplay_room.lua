@@ -57,6 +57,11 @@ function GameplayRoom:new(app)
             -- Wave completed, go to the next one
         end
     end)
+
+    self.event_layer:register(self, EnemySpawnedEvent, function (event)
+        ---@cast event EnemySpawnedEvent
+        self.enemies_left = self.enemies_left + 1
+    end)
 end
 
 
