@@ -4,8 +4,8 @@
   "BoardIndex": 0,
   "BoardCount": 1,
   "AutoSave": false,
-  "Pan.X": -299.352294921875,
-  "Pan.Y": -680.2861938476562,
+  "Pan.X": -261.6856689453125,
+  "Pan.Y": -792.2861938476562,
   "ZoomLevel": 5,
   "TaskTransparency": 5,
   "OutlineTasks": true,
@@ -959,7 +959,7 @@
       "BoardIndex": 0,
       "Position.X": 160,
       "Position.Y": 720,
-      "Checkbox.Checked": false,
+      "Checkbox.Checked": true,
       "Progression.Current": 0,
       "Progression.Max": 0,
       "Description": "Replenish magic shield",
@@ -972,7 +972,7 @@
       "BoardIndex": 0,
       "Position.X": 160,
       "Position.Y": 736,
-      "Checkbox.Checked": false,
+      "Checkbox.Checked": true,
       "Progression.Current": 0,
       "Progression.Max": 0,
       "Description": "Improve magic shield",
@@ -1087,6 +1087,18 @@
       "Selected": false,
       "TaskType.CurrentChoice": 0,
       "CreationTime": "Feb 21 2023 12:10:03"
+    }, 
+    {
+      "BoardIndex": 0,
+      "Position.X": 144,
+      "Position.Y": 832,
+      "Checkbox.Checked": false,
+      "Progression.Current": 0,
+      "Progression.Max": 0,
+      "Description": "Chain attacks give more points",
+      "Selected": false,
+      "TaskType.CurrentChoice": 0,
+      "CreationTime": "Feb 22 2023 08:37:46"
     }
   ]
 }
