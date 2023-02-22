@@ -517,13 +517,13 @@ function MagicShield:new(room, position)
 
     self.modifiers = {
         -- Max HP
-        max_hp = 0,
+        max_hp_num_upgrades = 0,
         max_hp_delta = 1,
     }
 end
 
 function MagicShield:get_max_hp()
-    return self.max_hp + self.modifiers.max_hp
+    return self.max_hp + self.modifiers.max_hp_delta*self.modifiers.max_hp_num_upgrades
 end
 
 function MagicShield:render()
