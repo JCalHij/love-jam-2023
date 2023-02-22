@@ -5,6 +5,8 @@ local UpgradeCosts = {
     AttackDamage = {2, 4, 6},
     AttackSpeed = {1, 1, 1, 2, 2, 2, 3, 3, 3},
     MoveSpeed = {1, 1, 1, 1, 1, 2, 2, 2, 3},
+    HpRecovery = 5,
+    MagicShieldMaxHp = {3, 3, 3, 3, 3},
 }
 
 
@@ -46,6 +48,7 @@ function UpgradePanel:render()
     self:_render_attack_damage()
     self:_render_attack_speed()
     self:_render_move_speed()
+    self:_render_hp_recovery()
 
     self:_player_points()
     self:_buy_button()
@@ -187,6 +190,33 @@ function UpgradePanel:_render_move_speed()
 end
 
 
+function UpgradePanel:_render_hp_recovery()
+    local x, y = 50, 140
+    imgui.label({x = x, y = y, w = 300, h = 25}, string.format("Magic Shield HP: %d / %d", self.magic_shield.hp, self.magic_shield:get_max_hp()))
+
+    -- Buy
+
+    imgui.set_state(self:_can_purchase_hp_recovery() and imgui.GuiState.NORMAL or imgui.GuiState.DISABLED)
+    if imgui.button({x = x + 300, y = y, w = 100, h = 25}, "Recover") then
+        -- Update magic shield
+        self.magic_shield.hp = self.magic_shield.hp + 1
+        -- Update points
+        self.room.player_points = self.room.player_points - UpgradeCosts.HpRecovery
+    end
+
+    -- Next cost
+
+    imgui.set_state(imgui.GuiState.NORMAL)
+    do
+        local label_rect = {x = x + 402, y = y, w = 25, h = 25}
+        if not self:_max_hp_reached() then
+            local cost = UpgradeCosts.HpRecovery
+            imgui.label(label_rect, string.format("Cost: %d", cost))
+        end
+    end
+end
+
+
 function UpgradePanel:_player_points()
     imgui.label({x = (VirtualWidth - self.buy_text_width) / 2, y = VirtualHeight - 60 - 120, w = 2*self.buy_text_width, h = 30}, string.format("%d", self.room.player_points))
 end
@@ -248,6 +278,20 @@ function UpgradePanel:_can_purchase_move_speed()
 end
 
 
+function UpgradePanel:_can_purchase_hp_recovery()
+    -- Max upgrade reached
+    if self:_max_hp_reached() then
+        return false
+    end
+    -- Not enough points. No need for bounds checking, as we are not at max upgrade (checked before)
+    if self.room.player_points < UpgradeCosts.HpRecovery then
+        return false
+    end
+    -- All OK, can purchase
+    return true
+end
+
+
 function UpgradePanel:_max_attack_damage_reached()
     return self.delta_num_upgrades.knight_attack_damage + self.current_num_upgrades.knight_attack_damage >= self.max_num_upgrades.knight_attack_damage
 end
@@ -260,6 +304,11 @@ end
 
 function UpgradePanel:_max_move_speed_reached()
     return self.delta_num_upgrades.knight_move_speed + self.current_num_upgrades.knight_move_speed >= self.max_num_upgrades.knight_move_speed
+end
+
+
+function UpgradePanel:_max_hp_reached()
+    return self.magic_shield.hp == self.magic_shield:get_max_hp()
 end
 
 
