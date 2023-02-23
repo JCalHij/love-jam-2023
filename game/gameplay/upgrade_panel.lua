@@ -174,7 +174,7 @@ function UpgradePanel:_render_move_speed()
         self.delta_num_upgrades.knight_move_speed = self.delta_num_upgrades.knight_move_speed + 1
         self.knight.modifiers.move_speed_num_upgrades = self.knight.modifiers.move_speed_num_upgrades + 1
         -- Update points
-        local index_to_purchase = self.delta_num_upgrades.knight_move_speed + self.current_num_upgrades.knight_move_speed + 1
+        local index_to_purchase = self.delta_num_upgrades.knight_move_speed + self.current_num_upgrades.knight_move_speed
         self.room.player_points = self.room.player_points - UpgradeCosts.MoveSpeed[index_to_purchase]
     end
 
@@ -246,7 +246,7 @@ function UpgradePanel:_render_max_hp()
         self.delta_num_upgrades.magic_shield_max_hp = self.delta_num_upgrades.magic_shield_max_hp + 1
         self.magic_shield.modifiers.max_hp_num_upgrades = self.magic_shield.modifiers.max_hp_num_upgrades + 1
         -- Update points
-        local index_to_purchase = self.delta_num_upgrades.magic_shield_max_hp + self.current_num_upgrades.magic_shield_max_hp + 1
+        local index_to_purchase = self.delta_num_upgrades.magic_shield_max_hp + self.current_num_upgrades.magic_shield_max_hp
         self.room.player_points = self.room.player_points - UpgradeCosts.MagicShieldMaxHp[index_to_purchase]
     end
 
@@ -357,17 +357,17 @@ end
 
 
 function UpgradePanel:_max_attack_damage_reached()
-    return self.delta_num_upgrades.knight_attack_damage + self.current_num_upgrades.knight_attack_damage >= self.max_num_upgrades.knight_attack_damage
+    return (self.delta_num_upgrades.knight_attack_damage + self.current_num_upgrades.knight_attack_damage) >= self.max_num_upgrades.knight_attack_damage
 end
 
 
 function UpgradePanel:_max_attack_speed_reached()
-    return self.delta_num_upgrades.knight_attack_speed + self.current_num_upgrades.knight_attack_speed >= self.max_num_upgrades.knight_attack_speed
+    return (self.delta_num_upgrades.knight_attack_speed + self.current_num_upgrades.knight_attack_speed) >= self.max_num_upgrades.knight_attack_speed
 end
 
 
 function UpgradePanel:_max_move_speed_reached()
-    return self.delta_num_upgrades.knight_move_speed + self.current_num_upgrades.knight_move_speed >= self.max_num_upgrades.knight_move_speed
+    return (self.delta_num_upgrades.knight_move_speed + self.current_num_upgrades.knight_move_speed) >= self.max_num_upgrades.knight_move_speed
 end
 
 
@@ -377,7 +377,7 @@ end
 
 
 function UpgradePanel:_max_maxhp_reached()
-    return self.delta_num_upgrades.magic_shield_max_hp + self.current_num_upgrades.magic_shield_max_hp >= self.max_num_upgrades.magic_shield_max_hp
+    return (self.delta_num_upgrades.magic_shield_max_hp + self.current_num_upgrades.magic_shield_max_hp) >= self.max_num_upgrades.magic_shield_max_hp
 end
 
 
