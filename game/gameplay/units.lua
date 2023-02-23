@@ -472,7 +472,7 @@ end
 function EnemyZombieBase:render()
     SetDrawColor({1, 0, 0, 1})
     love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
-    SetDrawColor({1, 1, 01, 1})
+    SetDrawColor({1, 1, 1, 1})
 end
 
 function EnemyZombieBase:destroy()
