@@ -42,28 +42,27 @@ end
 function OrderingKnightState:new(controller)
     OrderingKnightState.super.new(self, controller)
     self.targets = {}  ---@type Unit[]
-    self.trackers = {}  ---@type TrackerEffect[]
+    self.attack_chain = UnitChainEffect()
+    self.controller.room:add_effect(self.attack_chain)
 end
 
 function OrderingKnightState:update(dt)
     if input_is_key_pressed("escape") then
         -- Cancel ordering, back to idle
         print("Cancelling order, going to IdleState")
-        for _, tracker in ipairs(self.trackers) do
-            tracker:destroy()
-        end
+        self.attack_chain:destroy()
         self.controller.state = IdleState(self.controller)
         self:destroy()
     elseif input_is_mouse_released(EMouseButton.Left) then
         -- Commit order to knight unit (only if targets locked) and back to idle
         print("Commiting order, going to IdleState")
-        if #self.targets > 0 then
-            local targets_accepted = self.controller.room.knight:set_targets(self.targets)
+        if #self.attack_chain.units > 0 then
+            local targets_accepted = self.controller.room.knight:set_targets(self.attack_chain.units)
             if not targets_accepted then
-                for _, tracker in ipairs(self.trackers) do
-                    tracker:destroy()
-                end
+                self.attack_chain:destroy()
             end
+        else
+            self.attack_chain:destroy()
         end
         self.controller.state = IdleState(self.controller)
         self:destroy()
@@ -98,9 +97,7 @@ function OrderingKnightState:update(dt)
         if #filtered_units > 0 then
             for _, unit in ipairs(filtered_units) do
                 table.insert(self.targets, unit)
-                local tracker_effect = TrackerEffect(unit)
-                self.controller.room:add_effect(tracker_effect)
-                table.insert(self.trackers, tracker_effect)
+                self.attack_chain:add_unit(unit)
             end
         end
     end
@@ -109,7 +106,7 @@ end
 function OrderingKnightState:destroy()
     self.controller = nil
     self.targets = nil
-    self.trackers = nil
+    self.attack_chain = nil
 end
 
 

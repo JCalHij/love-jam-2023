@@ -1,35 +1,55 @@
 ---@class Effect: Unit
----@operator call(): TrackerEffect
+---@operator call(): Effect
 Effect = Object:extend()
 
 
 
----@class TrackerEffect: Effect
----@operator call(): TrackerEffect
-TrackerEffect = Effect:extend()
+---@class UnitChainEffect: Effect
+---@operator call(): UnitChainEffect
+UnitChainEffect = Effect:extend()
 
 
----@param unit Unit
-function TrackerEffect:new(unit)
-    self.unit = unit
+function UnitChainEffect:new()
+    self.units = {}  ---@type Unit[]
     self.alive = true
 end
 
-function TrackerEffect:update(dt)
-    if self.unit then
-        self.alive = self.unit.alive
+function UnitChainEffect:update(dt)
+    for i=#self.units, 1, -1 do
+        local unit = self.units[i]
+        if not unit.alive then
+            table.remove(self.units, i)
+        end
     end
 end
 
-function TrackerEffect:render()
-    if self.unit then
-        love.graphics.circle("line", self.unit.pos.x, self.unit.pos.y, 8)
+function UnitChainEffect:render()
+    -- Target reticules
+    for _, unit in ipairs(self.units) do
+        love.graphics.circle("line", unit.pos.x, unit.pos.y, 8)
+    end
+    -- Chain
+    if #self.units > 1 then
+        for i = 1, #self.units-1 do
+            local u1 = self.units[i]
+            local u2 = self.units[i+1]
+            love.graphics.line(u1.pos.x, u1.pos.y, u2.pos.x, u2.pos.y)
+        end
     end
 end
 
-function TrackerEffect:destroy()
-    self.unit = nil
+function UnitChainEffect:clear()
+    self.units = {}
+end
+
+function UnitChainEffect:destroy()
+    self.units = {}
     self.alive = false
+end
+
+---@param unit Unit
+function UnitChainEffect:add_unit(unit)
+    table.insert(self.units, unit)
 end
 
 

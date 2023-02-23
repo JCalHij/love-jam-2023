@@ -30,7 +30,7 @@ function GameplayRoom:new(app)
     self.waves = {
         -- Level 1
         {
-            { class =  NormalZombie, amount = 1 },
+            { class =  NormalZombie, amount = 4 },
         },
         -- Level 2
         {
