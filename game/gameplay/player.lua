@@ -74,7 +74,7 @@ function OrderingKnightState:update(dt)
         ---@param unit Unit
         local filter = function(unit)
             -- The unit class needs to be one of the following
-            local valid_unit_classes = { NormalZombie }
+            local valid_unit_classes = { NormalZombie, FastZombie, FatZombie }
             if table.ifind(valid_unit_classes, unit:class()) == nil then
                 return false
             end

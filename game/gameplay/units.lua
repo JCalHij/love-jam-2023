@@ -450,9 +450,42 @@ end
 
 
 
----@class NormalZombie: Unit
+---@class EnemyZombieBase: Unit
+---@operator call(): EnemyZombieBase
+EnemyZombieBase = Unit:extend()
+
+
+---@param room GameplayRoom
+---@param definition UnitDef
+function EnemyZombieBase:new(room, definition)
+    EnemyZombieBase.super.new(self, room, definition)
+
+    self.state = ZombieMovingState(self)
+    self.target = nil  ---@type Unit
+    self.knockback_vector = Vector2(0, 0)
+end
+
+function EnemyZombieBase:update(dt)
+    self.state:update(dt)
+end
+
+function EnemyZombieBase:render()
+    SetDrawColor({1, 0, 0, 1})
+    love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
+    SetDrawColor({1, 1, 01, 1})
+end
+
+function EnemyZombieBase:destroy()
+    self.state:destroy()
+    self.state = nil
+    self.room = nil
+end
+
+
+
+---@class NormalZombie: EnemyZombieBase
 ---@operator call(): NormalZombie
-NormalZombie = Unit:extend()
+NormalZombie = EnemyZombieBase:extend()
 
 
 ---@param room GameplayRoom
@@ -462,20 +495,12 @@ function NormalZombie:new(room, position)
     local BaseNormalZombieDef = {
         position = position,
         hit_points = 3,
-        move_speed = 20,
+        move_speed = 10,
         attack_damage = 1,
         attack_speed = 2.0,
-        collider_radius = 15,
+        collider_radius = 8,
     }
     NormalZombie.super.new(self, room, BaseNormalZombieDef)
-
-    self.state = ZombieMovingState(self)
-    self.target = nil  ---@type Unit
-    self.knockback_vector = Vector2(0, 0)
-end
-
-function NormalZombie:update(dt)
-    self.state:update(dt)
 end
 
 function NormalZombie:render()
@@ -484,10 +509,60 @@ function NormalZombie:render()
     SetDrawColor({1, 1, 01, 1})
 end
 
-function NormalZombie:destroy()
-    self.state:destroy()
-    self.state = nil
-    self.room = nil
+
+
+---@class FastZombie: EnemyZombieBase
+---@operator call(): FastZombie
+FastZombie = EnemyZombieBase:extend()
+
+
+---@param room GameplayRoom
+---@param position Vec2
+function FastZombie:new(room, position)
+    ---@type UnitDef
+    local BaseNormalZombieDef = {
+        position = position,
+        hit_points = 1,
+        move_speed = 20,
+        attack_damage = 1,
+        attack_speed = 2.0,
+        collider_radius = 3,
+    }
+    FastZombie.super.new(self, room, BaseNormalZombieDef)
+end
+
+function FastZombie:render()
+    SetDrawColor({1, 0, 0, 1})
+    love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
+    SetDrawColor({1, 1, 01, 1})
+end
+
+
+
+---@class FatZombie: EnemyZombieBase
+---@operator call(): FatZombie
+FatZombie = EnemyZombieBase:extend()
+
+
+---@param room GameplayRoom
+---@param position Vec2
+function FatZombie:new(room, position)
+    ---@type UnitDef
+    local BaseNormalZombieDef = {
+        position = position,
+        hit_points = 5,
+        move_speed = 10,
+        attack_damage = 1,
+        attack_speed = 2.0,
+        collider_radius = 20,
+    }
+    FatZombie.super.new(self, room, BaseNormalZombieDef)
+end
+
+function FatZombie:render()
+    SetDrawColor({1, 0, 0, 1})
+    love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
+    SetDrawColor({1, 1, 01, 1})
 end
 
 

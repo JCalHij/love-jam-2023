@@ -34,7 +34,9 @@ function GameplayRoom:new(app)
         },
         -- Level 2
         {
-            { class =  NormalZombie, amount = 2 },
+            { class =  NormalZombie, amount = 1 },
+            { class =  FastZombie, amount = 1 },
+            { class =  FatZombie, amount = 1 },
         },
     }
     self.current_wave = 1
@@ -57,7 +59,7 @@ function GameplayRoom:new(app)
     self.event_layer:register(self, EnemyKilledEvent, function (event)
         ---@cast event EnemyKilledEvent
         --//TODO[javi]: Points received depend on enemy type and current wave
-        self.player_points = self.player_points + 1
+        self.player_points = self.player_points + 10
         -- Update number of enemies left, and finish wave when done
         self.enemies_left = self.enemies_left - 1
         if self.enemies_left <= 0 then
