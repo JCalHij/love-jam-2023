@@ -19,6 +19,7 @@ function GameplayRoom:new(app)
 
     self.enemies_left = 0
     self.player_points = 0
+    self.max_attack_chain_count = 0
 
     self.show_game_ui = false
     self.show_end_screen_ui = false
@@ -60,6 +61,7 @@ function GameplayRoom:new(app)
         ---@cast event EnemyKilledEvent
         --//TODO[javi]: Points received depend on enemy type and current wave
         self.player_points = self.player_points + 10
+        self.max_attack_chain_count = math.max(self.max_attack_chain_count, self.knight.attack_chain_count)
         -- Update number of enemies left, and finish wave when done
         self.enemies_left = self.enemies_left - 1
         if self.enemies_left <= 0 then
@@ -231,6 +233,7 @@ function GameplayRoom:game_ui()
     love.graphics.print(string.format("Magic Shield %d / %d", self.magic_shield.hp, self.magic_shield:get_max_hp()), 10, 10)
     love.graphics.print(string.format("Player points %d", self.player_points), 10, 30)
     love.graphics.print(string.format("Enemies left %d", self.enemies_left), 10, 50)
+    love.graphics.print(string.format("Chain %d (Max %d)", self.knight.attack_chain_count, self.max_attack_chain_count), 10, 70)
 end
 
 

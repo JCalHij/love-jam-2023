@@ -68,6 +68,8 @@ local KnightKnockbackState = KnightState:extend()
 ---@param knight Knight
 function KnightIdleState:new(knight)
     self.knight = knight
+
+    self.knight:reset_chain_count()
 end
 
 function KnightIdleState:update(dt)
@@ -157,6 +159,7 @@ function KnightAttackingState:update(dt)
         -- Attack
         target:take_damage(self.knight:get_attack_damage(), self.knight)
         if not target.alive then
+            self.knight:increase_chain_count()
             self.knight.room.event_layer:notify(EnemyKilledEvent(target:class()))
             -- Remove target from list and go to the next one
             table.remove(self.knight.targets, 1)
@@ -230,8 +233,17 @@ function Knight:new(room, position)
     }
 
     self.targets = {}  ---@type Unit[]
+    self.attack_chain_count = 0  -- Number of successive attacks in a chain. Reset when going to idle
     self.state = KnightIdleState(self)  ---@type KnightState
     self.knockback_vector = Vector2(0, 0)
+end
+
+function Knight:increase_chain_count()
+    self.attack_chain_count = self.attack_chain_count + 1
+end
+
+function Knight:reset_chain_count()
+    self.attack_chain_count = 0
 end
 
 function Knight:get_attack_damage()
