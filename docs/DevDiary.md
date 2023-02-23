@@ -60,3 +60,12 @@ I did very little. I created an effect that becomes the player lost screen, and 
 Built the enemy wave system, pretty simple when using an object to do that stuff along with wave data. Next, I copy-pasted the lost screen effect code into a won screen effect, and I had a win screen. Stat modifiers for the knight and the magic shield were a bit tricky. I used getters to actually hide how the values get calculated. From the outside, the upgrade panel is in charge of updating the modifiers depending on the player points.
 
 I also did some improvements to the `input` and `imgui` modules, so that I can use `imgui` on a separate canvas.
+
+
+## Day 5 - Wednesday 22/02/2023
+
+I simply continued with the upgrade window and added the magic shield upgrades, HP recovery and MAX HP. I was not in the mood for anything else.
+
+
+## Day 6 - Thursday 23/02/2023
+
