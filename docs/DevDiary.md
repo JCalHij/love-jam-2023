@@ -69,3 +69,4 @@ I simply continued with the upgrade window and added the magic shield upgrades, 
 
 ## Day 6 - Thursday 23/02/2023
 
+I finally finished the prototype. It is really rough, no textures whatsoever, no pretty UI, but the game is there. All that is left (as if it were just a few things) is to create content: sprites, menus, effects, fonts, sounds, levels, balancing, ... It is a lot, but I think I can manage to create something small that people might enjoy playing, at least for a couple of minutes.
