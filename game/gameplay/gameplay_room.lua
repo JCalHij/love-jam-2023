@@ -254,3 +254,17 @@ function GameplayRoom:end_screen_ui()
         love.event.quit()
     end
 end
+
+
+function GameplayRoom:destroy()
+    self.event_layer:unregister(self, {PlayerLostEvent, EnemyKilledEvent, EnemySpawnedEvent, UpgradeRoomFinishedEvent})
+    self.event_layer = nil
+    self.app = nil
+    self:clear_units()
+    self.knight = nil
+    self.princess = nil
+    self.magic_shield = nil
+    self:clear_effects()
+    self.player:destroy()
+    self.player = nil
+end
