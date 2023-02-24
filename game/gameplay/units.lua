@@ -239,7 +239,7 @@ function Knight:new(room, position)
     self.w = 16
     self.h = 16
     local QuadDef = {
-        x = 0, y = 0, w = self.w, h = self.h,
+        x = 48, y = 0, w = self.w, h = self.h,
     }
     self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas)
 end
