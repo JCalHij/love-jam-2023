@@ -635,8 +635,15 @@ function MagicShield:new(room, position)
         x = 0, y = 32, w = self.w, h = self.h,
     }
     self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas)
-    -- self.color = {251/255, 242/255, 54/255, 1.0}  -- Yellow
-    self.color = {223/255, 113/255, 38/255, 1.0}  -- Orange
+
+    self.colors = {
+        high_hp = {106/255, 190/255, 48/255, 1.0}, ---@type Color green
+        medium_hp = {223/255, 113/255, 38/255, 1.0}, ---@type Color orange
+        low_hp = {182/255, 50/255, 50/255, 1.0}, ---@type Color red
+        -- Backups
+        yellow = {251/255, 242/255, 54/255, 1.0}, ---@type Color yellow
+    }
+    self.color = self.colors.high_hp
 end
 
 function MagicShield:get_max_hp()
@@ -654,6 +661,18 @@ end
 ---@param attacker Unit
 function MagicShield:take_damage(damage, attacker)
     MagicShield.super.take_damage(self, damage, attacker)
+
+    do
+        local hp_percentage = self.hp / self:get_max_hp()
+
+        if hp_percentage >= 0.75 then
+            self.color = self.colors.high_hp
+        elseif hp_percentage >= 0.33 then
+            self.color = self.colors.medium_hp
+        else
+            self.color = self.colors.low_hp
+        end
+    end
 
     if not self.alive then
         -- If the magic shield gets destroyed, knocks back all enemy units, no matter their distance to the shield
