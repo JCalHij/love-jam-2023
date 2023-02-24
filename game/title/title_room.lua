@@ -72,7 +72,7 @@ end
 function TitleRoom:render()
     if self.show_title then
         -- Background
-        love.graphics.draw(g_TextureAtlas, self.background_quad, (VirtualWidth - 4*self.background_rect.w)/2, (VirtualHeight - 4*self.background_rect.h)/2, 0, 4, 4)
+        love.graphics.draw(g_TextureAtlas, self.background_quad, (VirtualWidth - 3*self.background_rect.w)/2, (VirtualHeight - 3*self.background_rect.h)/2, 0, 3, 3)
         -- Game title
         love.graphics.draw(g_TextureAtlas, self.title_quad, (VirtualWidth - self.title_rect.w)/2, self.border_padding)
         -- Developer
