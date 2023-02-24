@@ -615,7 +615,7 @@ function MagicShield:new(room, position)
         move_speed = 0,
         attack_damage = 0,
         attack_speed = 0.0,
-        collider_radius = 50,
+        collider_radius = 24,
     }
     MagicShield.super.new(self, room, BaseMagicShieldDef)
 
