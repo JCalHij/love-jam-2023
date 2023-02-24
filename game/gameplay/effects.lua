@@ -113,3 +113,50 @@ function WonScreenEffect:destroy()
     self.unit = nil
     self.alive = false
 end
+
+
+
+---@class MagicShieldHitEffect: Effect
+---@operator call(): MagicShieldHitEffect
+MagicShieldHitEffect = Effect:extend()
+
+---@param magic_shield MagicShield
+function MagicShieldHitEffect:new(magic_shield)
+    self.magic_shield = magic_shield
+    local rects = {
+        {x = 48*1, y = 32, w = magic_shield.w, h = magic_shield.h},
+        {x = 48*2, y = 32, w = magic_shield.w, h = magic_shield.h},
+        {x = 48*3, y = 32, w = magic_shield.w, h = magic_shield.h},
+        {x = 48*4, y = 32, w = magic_shield.w, h = magic_shield.h},
+        {x = 48*5, y = 32, w = magic_shield.w, h = magic_shield.h},
+    }  ---@type Rectangle[]
+    self.quads = {}
+    for _, rect in ipairs(rects) do
+        table.insert(self.quads, love.graphics.newQuad(rect.x, rect.y, rect.w, rect.h, g_TextureAtlas))
+    end
+    self.times = { 0.1, 0.1, 0.1, 0.1, 0.1 } ---@type number[]
+    self.index = 1
+    self.time = 0
+end
+
+function MagicShieldHitEffect:update(dt)
+    self.time = self.time + dt
+    if self.time >= self.times[self.index] then
+        self.time = self.time - self.times[self.index]
+        self.index = self.index + 1
+        if self.index > #self.quads then
+            self.alive = false
+        end
+    end
+end
+
+function MagicShieldHitEffect:render()
+    SetDrawColor(self.magic_shield.color)
+    love.graphics.draw(g_TextureAtlas, self.quads[self.index], self.magic_shield.pos.x - self.magic_shield.w/2, self.magic_shield.pos.y - self.magic_shield.h/2)
+    SetDrawColor({1,1,1,1})
+end
+
+function MagicShieldHitEffect:destroy()
+    self.times = nil
+    self.quads = nil
+end
