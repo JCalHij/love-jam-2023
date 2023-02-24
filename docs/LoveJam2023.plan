@@ -4,9 +4,9 @@
   "BoardIndex": 0,
   "BoardCount": 1,
   "AutoSave": false,
-  "Pan.X": -590.939697265625,
-  "Pan.Y": -488.71356201171875,
-  "ZoomLevel": 5,
+  "Pan.X": -628.9275512695312,
+  "Pan.Y": -567.9217529296875,
+  "ZoomLevel": 4,
   "TaskTransparency": 5,
   "OutlineTasks": true,
   "BracketSubtasks": true,
@@ -1112,6 +1112,42 @@
       "Selected": false,
       "TaskType.CurrentChoice": 0,
       "CreationTime": "Feb 24 2023 07:51:46"
+    }, 
+    {
+      "BoardIndex": 0,
+      "Position.X": 512,
+      "Position.Y": 720,
+      "Checkbox.Checked": false,
+      "Progression.Current": 0,
+      "Progression.Max": 0,
+      "Description": "Fix upgrade menu HP bug",
+      "Selected": false,
+      "TaskType.CurrentChoice": 0,
+      "CreationTime": "Feb 24 2023 12:02:24"
+    }, 
+    {
+      "BoardIndex": 0,
+      "Position.X": 512,
+      "Position.Y": 736,
+      "Checkbox.Checked": false,
+      "Progression.Current": 0,
+      "Progression.Max": 0,
+      "Description": "Fix upgrade menu, destroyed shield does not appear anymore",
+      "Selected": false,
+      "TaskType.CurrentChoice": 0,
+      "CreationTime": "Feb 24 2023 12:02:48"
+    }, 
+    {
+      "BoardIndex": 0,
+      "Position.X": 512,
+      "Position.Y": 752,
+      "Checkbox.Checked": false,
+      "Progression.Current": 0,
+      "Progression.Max": 0,
+      "Description": "Upgrade menu color palette",
+      "Selected": false,
+      "TaskType.CurrentChoice": 0,
+      "CreationTime": "Feb 24 2023 12:03:15"
     }
   ]
 }
