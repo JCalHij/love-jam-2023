@@ -236,6 +236,12 @@ function Knight:new(room, position)
     self.attack_chain_count = 0  -- Number of successive attacks in a chain. Reset when going to idle
     self.state = KnightIdleState(self)  ---@type KnightState
     self.knockback_vector = Vector2(0, 0)
+    self.w = 16
+    self.h = 16
+    local QuadDef = {
+        x = 0, y = 0, w = self.w, h = self.h,
+    }
+    self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas)
 end
 
 function Knight:increase_chain_count()
@@ -263,9 +269,7 @@ function Knight:update(dt)
 end
 
 function Knight:render()
-    SetDrawColor({0, 1, 0, 1})
-    love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
-    SetDrawColor({1, 1, 01, 1})
+    love.graphics.draw(g_TextureAtlas, self.quad, self.pos.x - self.w/2, self.pos.y - self.h/2)
 end
 
 ---@param targets Unit[]
