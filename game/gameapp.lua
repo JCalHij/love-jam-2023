@@ -1,5 +1,6 @@
 ---@alias RoomName
 ---| "gameplay"
+---| "title"
 
 
 ---@class GameApp: Object
@@ -12,12 +13,13 @@ function GameApp:new()
     self.timer = Timer()  ---@type Timer
     imgui.init()
 
-    ---@type {[RoomName]: GameplayRoom}
+    ---@type {[RoomName]: table}
     self.rooms= {
-        ["gameplay"] = GameplayRoom(self)
+        ["gameplay"] = GameplayRoom(self),
+        ["title"] = TitleRoom(self),
     }
     self.current_room = nil  ---@type RoomName
-    self:enter("gameplay")
+    self:enter("title")
 end
 
 
