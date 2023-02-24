@@ -1,0 +1,3 @@
+local path = ...
+
+require (path .. ".title_room")
