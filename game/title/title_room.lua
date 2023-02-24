@@ -19,8 +19,8 @@ function TitleRoom:new(app)
     self.dev_quad = love.graphics.newQuad(self.dev_rect.x, self.dev_rect.y, self.dev_rect.w, self.dev_rect.h, g_TextureAtlas)
 
     self.background_rect = {
-        x = 0, y = 96,
-        w = 208, h = 144,
+        x = 1, y = 81,
+        w = 158, h = 78,
     }
     self.background_quad = love.graphics.newQuad(self.background_rect.x, self.background_rect.y, self.background_rect.w, self.background_rect.h, g_TextureAtlas)
 
