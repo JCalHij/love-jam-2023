@@ -122,6 +122,7 @@ MagicShieldHitEffect = Effect:extend()
 
 ---@param magic_shield MagicShield
 function MagicShieldHitEffect:new(magic_shield)
+    self.alive = true
     self.magic_shield = magic_shield
     local rects = {
         {x = 48*1, y = 32, w = magic_shield.w, h = magic_shield.h},
@@ -134,7 +135,7 @@ function MagicShieldHitEffect:new(magic_shield)
     for _, rect in ipairs(rects) do
         table.insert(self.quads, love.graphics.newQuad(rect.x, rect.y, rect.w, rect.h, g_TextureAtlas))
     end
-    self.times = { 0.1, 0.1, 0.1, 0.1, 0.1 } ---@type number[]
+    self.times = { 0.075, 0.075, 0.075, 0.075, 0.075 } ---@type number[]
     self.index = 1
     self.time = 0
 end

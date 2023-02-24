@@ -671,6 +671,8 @@ function MagicShield:take_damage(damage, attacker)
             unit.knockback_vector = magnitude * knockback_vector
             unit.state = ZombieKnockbackState(unit)
         end
+    else
+        self.room:add_effect(MagicShieldHitEffect(self))
     end
 end
 
