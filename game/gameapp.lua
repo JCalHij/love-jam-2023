@@ -37,9 +37,11 @@ end
 
 ---@param room RoomName
 function GameApp:enter(room)
-    if self.current_room ~= nil then
-        -- Exit old room?
-    end
-    self.current_room = room
-    self.rooms[room]:init()
+    self.timer:after(0, function()
+        if self.current_room ~= nil then
+            -- Exit old room?
+        end
+        self.current_room = room
+        self.rooms[room]:init()
+    end)
 end

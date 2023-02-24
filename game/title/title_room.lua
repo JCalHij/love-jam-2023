@@ -62,6 +62,7 @@ function TitleRoom:update(dt)
         if self.show_tutorial_advance_text then
             if input_is_key_pressed("space") then
                 -- Move to GameplayRoom
+                self.app:enter("gameplay")
             end
         end
     end
