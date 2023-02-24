@@ -612,6 +612,14 @@ function MagicShield:new(room, position)
         max_hp_num_upgrades = 0,
         max_hp_delta = 1,
     }
+
+    self.w = 48
+    self.h = 48
+    local QuadDef = {
+        x = 0, y = 32, w = self.w, h = self.h,
+    }
+    self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas:getWidth(), g_TextureAtlas:getHeight())
+
 end
 
 function MagicShield:get_max_hp()
@@ -619,9 +627,10 @@ function MagicShield:get_max_hp()
 end
 
 function MagicShield:render()
-    SetDrawColor({1, 1, 0, 1})
-    love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
-    SetDrawColor({1, 1, 1, 1})
+    love.graphics.draw(g_TextureAtlas, self.quad, self.pos.x - self.w/2, self.pos.y - self.h/2)
+    -- SetDrawColor({1, 1, 0, 1})
+    -- love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
+    -- SetDrawColor({1, 1, 1, 1})
 end
 
 ---@param damage integer
