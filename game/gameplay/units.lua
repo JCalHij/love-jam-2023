@@ -547,15 +547,19 @@ function FastZombie:new(room, position)
         move_speed = 20,
         attack_damage = 1,
         attack_speed = 2.0,
-        collider_radius = 3,
+        collider_radius = 5,
     }
     FastZombie.super.new(self, room, BaseNormalZombieDef)
+    self.w = 16
+    self.h = 16
+    local QuadDef = {
+        x = 16, y = 16, w = self.w, h = self.h,
+    }
+    self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas:getWidth(), g_TextureAtlas:getHeight())
 end
 
 function FastZombie:render()
-    SetDrawColor({1, 0, 0, 1})
-    love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
-    SetDrawColor({1, 1, 01, 1})
+    love.graphics.draw(g_TextureAtlas, self.quad, self.pos.x - self.w/2, self.pos.y - self.h/2)
 end
 
 

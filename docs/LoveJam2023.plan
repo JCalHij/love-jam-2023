@@ -419,7 +419,7 @@
       "BoardIndex": 0,
       "Position.X": 528,
       "Position.Y": 352,
-      "Checkbox.Checked": false,
+      "Checkbox.Checked": true,
       "Progression.Current": 0,
       "Progression.Max": 0,
       "Description": "Fast zombie",
