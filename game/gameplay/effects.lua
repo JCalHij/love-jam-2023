@@ -65,8 +65,8 @@ function LostScreenEffect:new(duration)
     self.target_alpha = 1.0
     self.fade_in_speed = self.target_alpha / duration
     self.lost_rect = {
-        x = 1, y = 160,
-        w = 158, h = 79
+        x = 1, y = 161,
+        w = 158, h = 78
     }
     self.lost_quad = love.graphics.newQuad(self.lost_rect.x, self.lost_rect.y, self.lost_rect.w, self.lost_rect.h, g_TextureAtlas)
 end
@@ -100,6 +100,11 @@ function WonScreenEffect:new(duration)
     self.alpha = 0.0
     self.target_alpha = 1.0
     self.fade_in_speed = self.target_alpha / duration
+    self.won_rect = {
+        x = 161, y = 81,
+        w = 158, h = 78
+    }
+    self.won_quad = love.graphics.newQuad(self.won_rect.x, self.won_rect.y, self.won_rect.w, self.won_rect.h, g_TextureAtlas)
 end
 
 function WonScreenEffect:update(dt)
@@ -110,7 +115,7 @@ function WonScreenEffect:render()
     SetDrawColor({0, 0, 0, self.alpha})
     DrawRectangle({x=0, y=0, w=VirtualWidth, h=VirtualHeight})
     SetDrawColor({1, 1, 1, self.alpha})
-    love.graphics.printf("YOU WON, CONGRATULATIONS!", 0, VirtualHeight/2, VirtualWidth, "center")
+    love.graphics.draw(g_TextureAtlas, self.won_quad, math.round((VirtualWidth-self.won_rect.w)/2), math.round((VirtualHeight-self.won_rect.h)/2))
     SetDrawColor({1, 1, 1, 1})
 end
 
