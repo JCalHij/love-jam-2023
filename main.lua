@@ -31,7 +31,7 @@ end
 function love.draw()
     love.graphics.setCanvas(MainCanvas)
     love.graphics.setBlendMode('alpha', "alphamultiply")
-    love.graphics.clear({0.3, 0.5, 1.0, 1.0})
+    love.graphics.clear({63/255, 63/255, 116/255, 1.0})
     g_GameApp:render()
     love.graphics.setCanvas()
 
