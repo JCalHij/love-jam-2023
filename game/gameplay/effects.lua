@@ -64,6 +64,11 @@ function LostScreenEffect:new(duration)
     self.alpha = 0.0
     self.target_alpha = 1.0
     self.fade_in_speed = self.target_alpha / duration
+    self.lost_rect = {
+        x = 1, y = 160,
+        w = 158, h = 79
+    }
+    self.lost_quad = love.graphics.newQuad(self.lost_rect.x, self.lost_rect.y, self.lost_rect.w, self.lost_rect.h, g_TextureAtlas)
 end
 
 function LostScreenEffect:update(dt)
@@ -74,7 +79,7 @@ function LostScreenEffect:render()
     SetDrawColor({0, 0, 0, self.alpha})
     DrawRectangle({x=0, y=0, w=VirtualWidth, h=VirtualHeight})
     SetDrawColor({1, 1, 1, self.alpha})
-    love.graphics.printf("YOU LOST", 0, VirtualHeight/2, VirtualWidth, "center")
+    love.graphics.draw(g_TextureAtlas, self.lost_quad, math.round((VirtualWidth-self.lost_rect.w)/2), math.round((VirtualHeight-self.lost_rect.h)/2))
     SetDrawColor({1, 1, 1, 1})
 end
 
