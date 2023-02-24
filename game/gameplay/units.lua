@@ -270,7 +270,7 @@ function Knight:update(dt)
 end
 
 function Knight:render()
-    love.graphics.draw(g_TextureAtlas, self.quad, self.pos.x - self.w/2, self.pos.y - self.h/2)
+    love.graphics.draw(g_TextureAtlas, self.quad, math.round(self.pos.x - self.w/2), math.round(self.pos.y - self.h/2))
 end
 
 ---@param targets Unit[]
@@ -332,7 +332,7 @@ function Princess:new(room, position)
 end
 
 function Princess:render()
-    love.graphics.draw(g_TextureAtlas, self.quad, self.pos.x - self.w/2, self.pos.y - self.h/2)
+    love.graphics.draw(g_TextureAtlas, self.quad, math.round(self.pos.x - self.w/2), math.round(self.pos.y - self.h/2))
 end
 
 ---@param damage integer
@@ -532,7 +532,7 @@ function NormalZombie:new(room, position)
 end
 
 function NormalZombie:render()
-    love.graphics.draw(g_TextureAtlas, self.quad, self.pos.x - self.w/2, self.pos.y - self.h/2)
+    love.graphics.draw(g_TextureAtlas, self.quad, math.round(self.pos.x - self.w/2), math.round(self.pos.y - self.h/2))
 end
 
 
@@ -564,7 +564,7 @@ function FastZombie:new(room, position)
 end
 
 function FastZombie:render()
-    love.graphics.draw(g_TextureAtlas, self.quad, self.pos.x - self.w/2, self.pos.y - self.h/2)
+    love.graphics.draw(g_TextureAtlas, self.quad, math.round(self.pos.x - self.w/2), math.round(self.pos.y - self.h/2))
 end
 
 
@@ -596,7 +596,7 @@ function FatZombie:new(room, position)
 end
 
 function FatZombie:render()
-    love.graphics.draw(g_TextureAtlas, self.quad, self.pos.x - self.w/2, self.pos.y - self.h/2)
+    love.graphics.draw(g_TextureAtlas, self.quad, math.round(self.pos.x - self.w/2), math.round(self.pos.y - self.h/2))
 end
 
 
@@ -653,8 +653,7 @@ end
 
 function MagicShield:render()
     SetDrawColor(self.color)
-    love.graphics.draw(g_TextureAtlas, self.quad, self.pos.x - self.w/2, self.pos.y - self.h/2)
-    -- love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
+    love.graphics.draw(g_TextureAtlas, self.quad, math.round(self.pos.x - self.w/2), math.round(self.pos.y - self.h/2))
     SetDrawColor({1, 1, 1, 1})
 end
 
