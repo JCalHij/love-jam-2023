@@ -431,7 +431,7 @@
       "BoardIndex": 0,
       "Position.X": 528,
       "Position.Y": 368,
-      "Checkbox.Checked": false,
+      "Checkbox.Checked": true,
       "Progression.Current": 0,
       "Progression.Max": 0,
       "Description": "Fat zombie",
