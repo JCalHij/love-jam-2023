@@ -4,8 +4,8 @@
   "BoardIndex": 0,
   "BoardCount": 1,
   "AutoSave": false,
-  "Pan.X": -571.6267700195312,
-  "Pan.Y": -488.2228698730469,
+  "Pan.X": -687.9597778320312,
+  "Pan.Y": -526.55615234375,
   "ZoomLevel": 5,
   "TaskTransparency": 5,
   "OutlineTasks": true,
@@ -1035,7 +1035,7 @@
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
-      "Description": "Points",
+      "Description": "Points earned",
       "Selected": false,
       "TaskType.CurrentChoice": 0,
       "CreationTime": "Feb 18 2023 12:03:33"
@@ -1047,7 +1047,7 @@
       "Checkbox.Checked": false,
       "Progression.Current": 0,
       "Progression.Max": 0,
-      "Description": "Abilities",
+      "Description": "Ability costs",
       "Selected": false,
       "TaskType.CurrentChoice": 0,
       "CreationTime": "Feb 18 2023 12:03:40"
