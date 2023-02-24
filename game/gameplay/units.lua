@@ -317,12 +317,17 @@ function Princess:new(room, position)
     }
     Princess.super.new(self, room, BasePrincessDef)
     self.dead = false ---@type boolean Different than "alive" property, signals that the princess has been attacked and the game is done
+    local QuadDef = {
+        x = 16, y = 0, w = 16, h = 16,
+    }
+    self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas:getWidth(), g_TextureAtlas:getHeight())
 end
 
 function Princess:render()
-    SetDrawColor({1, 0, 1, 1})
-    love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
-    SetDrawColor({1, 1, 01, 1})
+    love.graphics.draw(g_TextureAtlas, self.quad, self.pos.x - 8, self.pos.y - 8)
+    -- SetDrawColor({1, 0, 1, 1})
+    -- love.graphics.circle("line", self.pos.x, self.pos.y, self.collider_radius)
+    -- SetDrawColor({1, 1, 01, 1})
 end
 
 ---@param damage integer
