@@ -158,6 +158,7 @@ function KnightAttackingState:update(dt)
         self.attack_timer = self.attack_timer + self.knight:get_attack_speed()
         -- Attack
         target:take_damage(self.knight:get_attack_damage(), self.knight)
+        self.knight.room:add_effect(KnightAttackEffect(target))
         if not target.alive then
             self.knight:increase_chain_count()
             self.knight.room.event_layer:notify(EnemyKilledEvent(target:class()))

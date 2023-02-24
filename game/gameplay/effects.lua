@@ -161,3 +161,35 @@ function MagicShieldHitEffect:destroy()
     self.times = nil
     self.quads = nil
 end
+
+
+
+---@class KnightAttackEffect: Effect
+---@operator call(): KnightAttackEffect
+KnightAttackEffect = Effect:extend()
+
+---@param target Unit
+function KnightAttackEffect:new(target)
+    self.alive = true
+    self.target = target
+    self.w, self.h = target.w, target.h
+    self.pos = self.target.pos
+    self.quad = love.graphics.newQuad(64, 0, 16, 16, g_TextureAtlas)
+    self.time = 0.075
+end
+
+function KnightAttackEffect:update(dt)
+    self.time = self.time - dt
+    if self.time <= 0 then
+        self.alive = false
+    end
+end
+
+function KnightAttackEffect:render()
+    love.graphics.draw(g_TextureAtlas, self.quad, self.pos.x - self.w/2, self.pos.y - self.h/2)
+end
+
+function KnightAttackEffect:destroy()
+    self.target = nil
+    self.quad = nil
+end
