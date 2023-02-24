@@ -70,3 +70,10 @@ I simply continued with the upgrade window and added the magic shield upgrades, 
 ## Day 6 - Thursday 23/02/2023
 
 I finally finished the prototype. It is really rough, no textures whatsoever, no pretty UI, but the game is there. All that is left (as if it were just a few things) is to create content: sprites, menus, effects, fonts, sounds, levels, balancing, ... It is a lot, but I think I can manage to create something small that people might enjoy playing, at least for a couple of minutes.
+
+
+## Day 7 - Friday 24/02/2023
+
+I created a lot of sprites and a lot of cool things, like the magic shield effect of being hit. That was really fun. I also played around a bit with the colors of the magic shield, so that the princess could be properly be seen.
+
+I created as well the main menu and a simple text-based tutorial. The game's minimum version is almost finished. I think we need sound effects, background music, a new font, credits and game content and balancing. Also, an explosion effect for the shield would be nice, as well as a zombie attack effect. I would also like to improve the game title image, both the background and the name, and how the upgrade menu looks, at least color-wise.
