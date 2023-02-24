@@ -321,7 +321,7 @@ function Princess:new(room, position)
     self.w = 16
     self.h = 16
     local QuadDef = {
-        x = 16, y = 0, w = self.w, h = self.h,
+        x = 32, y = 0, w = self.w, h = self.h,
     }
     self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas:getWidth(), g_TextureAtlas:getHeight())
 end
@@ -619,8 +619,8 @@ function MagicShield:new(room, position)
         x = 0, y = 32, w = self.w, h = self.h,
     }
     self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas:getWidth(), g_TextureAtlas:getHeight())
-    self.color = {251/255, 242/255, 54/255, 1.0}  -- Yellow
-    -- self.color = {223/255, 113/255, 38/255, 1.0}  -- Orange
+    -- self.color = {251/255, 242/255, 54/255, 1.0}  -- Yellow
+    self.color = {223/255, 113/255, 38/255, 1.0}  -- Orange
 end
 
 function MagicShield:get_max_hp()
