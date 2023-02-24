@@ -323,7 +323,7 @@ function Princess:new(room, position)
     local QuadDef = {
         x = 32, y = 0, w = self.w, h = self.h,
     }
-    self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas:getWidth(), g_TextureAtlas:getHeight())
+    self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas)
 end
 
 function Princess:render()
@@ -523,7 +523,7 @@ function NormalZombie:new(room, position)
     local QuadDef = {
         x = 0, y = 16, w = self.w, h = self.h,
     }
-    self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas:getWidth(), g_TextureAtlas:getHeight())
+    self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas)
 end
 
 function NormalZombie:render()
@@ -555,7 +555,7 @@ function FastZombie:new(room, position)
     local QuadDef = {
         x = 16, y = 16, w = self.w, h = self.h,
     }
-    self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas:getWidth(), g_TextureAtlas:getHeight())
+    self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas)
 end
 
 function FastZombie:render()
@@ -587,7 +587,7 @@ function FatZombie:new(room, position)
     local QuadDef = {
         x = 32, y = 16, w = self.w, h = self.h,
     }
-    self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas:getWidth(), g_TextureAtlas:getHeight())
+    self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas)
 end
 
 function FatZombie:render()
@@ -630,7 +630,7 @@ function MagicShield:new(room, position)
     local QuadDef = {
         x = 0, y = 32, w = self.w, h = self.h,
     }
-    self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas:getWidth(), g_TextureAtlas:getHeight())
+    self.quad = love.graphics.newQuad(QuadDef.x, QuadDef.y, QuadDef.w, QuadDef.h, g_TextureAtlas)
     -- self.color = {251/255, 242/255, 54/255, 1.0}  -- Yellow
     self.color = {223/255, 113/255, 38/255, 1.0}  -- Orange
 end
