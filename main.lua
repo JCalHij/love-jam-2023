@@ -19,6 +19,8 @@ function love.load(args, unfiltered_args)
 	love.resize(WindowWidth, WindowHeight)
 	MainCanvas = love.graphics.newCanvas(VirtualWidth, VirtualHeight)
 
+	g_TextureAtlas = love.graphics.newImage("content/texture_atlas.png")
+
 	g_GameApp = GameApp()
 end
 
