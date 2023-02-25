@@ -129,7 +129,7 @@ function KnightIdleState:update(dt)
     ---@param unit Unit
     local filter = function(unit)
         -- The target unit class needs to be one of the following
-        local valid_unit_classes = { NormalZombie }
+        local valid_unit_classes = { NormalZombie, FastZombie, FatZombie }
         if table.ifind(valid_unit_classes, unit:class()) == nil then
             return false
         end
@@ -690,7 +690,7 @@ function MagicShield:take_damage(damage, attacker)
         self.ignore_collisions = true
         -- If the magic shield gets destroyed, knocks back all enemy units, no matter their distance to the shield
         local enemy_units = self.room:filter_units(function (unit)
-            return table.ifind({ NormalZombie }, unit:class()) ~= nil
+            return table.ifind({ NormalZombie, FastZombie, FatZombie }, unit:class()) ~= nil
         end)
 
         for _, zombie in ipairs(enemy_units) do
