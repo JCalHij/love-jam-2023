@@ -16,6 +16,7 @@ function GameplayRoom:new(app)
     self.knight = nil  ---@type Knight
     self.princess = nil  ---@type Princess
     self.magic_shield = nil  ---@type MagicShield
+    self.spawner = nil  ---@type EnemySpawner
 
     self.enemies_left = 0
     self.player_points = 0
@@ -64,7 +65,7 @@ function GameplayRoom:new(app)
         self.max_attack_chain_count = math.max(self.max_attack_chain_count, self.knight.attack_chain_count)
         -- Update number of enemies left, and finish wave when done
         self.enemies_left = self.enemies_left - 1
-        if self.enemies_left <= 0 then
+        if not self.spawner and self.enemies_left <= 0 then
             -- Wave completed, go to the next one
             self.current_wave = self.current_wave + 1
             self.show_game_ui = false
@@ -142,7 +143,8 @@ end
 function GameplayRoom:new_wave()
     self.show_game_ui = true
     assert(self.waves[self.current_wave], string.format("No wave data exists for wave number %d", self.current_wave))
-    table.insert(self.units, EnemySpawner(self, self.waves[self.current_wave]))
+    self.spawner = EnemySpawner(self, self.waves[self.current_wave])
+    table.insert(self.units, self.spawner)
 end
 
 
@@ -151,6 +153,10 @@ function GameplayRoom:update(dt)
 
     for _, unit in ipairs(self.units) do
         unit:update(dt)
+    end
+
+    if self.spawner and not self.spawner.alive then
+        self.spawner = nil
     end
 
     for _, effect in ipairs(self.effects) do

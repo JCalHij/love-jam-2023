@@ -4,9 +4,9 @@
   "BoardIndex": 0,
   "BoardCount": 1,
   "AutoSave": false,
-  "Pan.X": -628.9275512695312,
-  "Pan.Y": -567.9217529296875,
-  "ZoomLevel": 4,
+  "Pan.X": -716.3803100585938,
+  "Pan.Y": -732.7942504882812,
+  "ZoomLevel": 5,
   "TaskTransparency": 5,
   "OutlineTasks": true,
   "BracketSubtasks": true,
@@ -1148,6 +1148,18 @@
       "Selected": false,
       "TaskType.CurrentChoice": 0,
       "CreationTime": "Feb 24 2023 12:03:15"
+    }, 
+    {
+      "BoardIndex": 0,
+      "Position.X": 512,
+      "Position.Y": 768,
+      "Checkbox.Checked": true,
+      "Progression.Current": 0,
+      "Progression.Max": 0,
+      "Description": "Fix instantaneous wave ending",
+      "Selected": false,
+      "TaskType.CurrentChoice": 0,
+      "CreationTime": "Feb 25 2023 08:23:02"
     }
   ]
 }
