@@ -236,6 +236,8 @@ function UpgradePanel:_render_max_hp()
         -- Update magic shield
         self.delta_num_upgrades.magic_shield_max_hp = self.delta_num_upgrades.magic_shield_max_hp - 1
         self.magic_shield.modifiers.max_hp_num_upgrades = self.magic_shield.modifiers.max_hp_num_upgrades - 1
+        -- Decrease as well the current HP of the shield, as buying increases it
+        self.magic_shield.hp = self.magic_shield.hp - 1
     end
 
     -- Buy
@@ -245,6 +247,8 @@ function UpgradePanel:_render_max_hp()
         -- Update magic shield
         self.delta_num_upgrades.magic_shield_max_hp = self.delta_num_upgrades.magic_shield_max_hp + 1
         self.magic_shield.modifiers.max_hp_num_upgrades = self.magic_shield.modifiers.max_hp_num_upgrades + 1
+        -- Increase as well the current HP of the shield, as selling decreases it
+        self.magic_shield.hp = self.magic_shield.hp + 1
         -- Update points
         local index_to_purchase = self.delta_num_upgrades.magic_shield_max_hp + self.current_num_upgrades.magic_shield_max_hp
         self.room.player_points = self.room.player_points - UpgradeCosts.MagicShieldMaxHp[index_to_purchase]
