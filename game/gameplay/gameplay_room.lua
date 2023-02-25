@@ -178,7 +178,7 @@ function GameplayRoom:init()
 
     -- Spawn first the magic shield, so that it gets rendered first and appears below all other units
     self.magic_shield = self:spawn_unit(MagicShield, Vector2(VirtualWidth/2, VirtualHeight/2))
-    self.knight = self:spawn_unit(Knight, Vector2(100, 100))
+    self.knight = self:spawn_unit(Knight, Vector2(VirtualWidth/2 - 30, VirtualHeight/2))
     self.princess = self:spawn_unit(Princess, Vector2(VirtualWidth/2, VirtualHeight/2))
 
     self.show_game_ui = true
