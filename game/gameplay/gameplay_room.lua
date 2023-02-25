@@ -111,7 +111,7 @@ function GameplayRoom:new(app)
     self.event_layer:register(self, EnemyKilledEvent, function (event)
         ---@cast event EnemyKilledEvent
         -- Points received depend on current attack chain
-        self.player_points = self.player_points + 10*self.knight.attack_chain_count
+        self.player_points = self.player_points + 8*self.knight.attack_chain_count
         self.max_attack_chain_count = math.max(self.max_attack_chain_count, self.knight.attack_chain_count)
         -- Update number of enemies left, and finish wave when done
         self.enemies_left = self.enemies_left - 1
