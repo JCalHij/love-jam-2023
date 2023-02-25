@@ -12,6 +12,7 @@ function GameApp:new()
     self.event_layer = EventLayer("AppEventLayer", AllEventClasses)
     self.timer = Timer()  ---@type Timer
     imgui.init()
+    imgui.load_cyber_style()
 
     ---@type {[RoomName]: table}
     self.rooms= {

@@ -979,6 +979,25 @@ function imgui.load_jungle_style()
 end
 
 
+function imgui.load_cyber_style()
+    imgui.set_style("default", "border_color_normal", 0x2f7486ff)
+    imgui.set_style("default", "base_color_normal", 0x024658ff)
+    imgui.set_style("default", "text_color_normal", 0x51bfd3ff)
+    imgui.set_style("default", "border_color_focused", 0x82cde0ff)
+    imgui.set_style("default", "base_color_focused", 0x3299b4ff)
+    imgui.set_style("default", "text_color_focused", 0xb6e1eaff)
+    imgui.set_style("default", "border_color_pressed", 0xeb7630ff)
+    imgui.set_style("default", "base_color_pressed", 0xffbc51ff)
+    imgui.set_style("default", "text_color_pressed", 0xd86f36ff)
+    imgui.set_style("default", "text_color_disabled", 0x134b5aff)
+    imgui.set_style("default", "base_color_disabled", 0x02313dff)
+    imgui.set_style("default", "text_color_disabled", 0x17505fff)
+    imgui.set_style("default", "text_spacing", 0)
+    imgui.set_style("default", "line_color", 0x81c0d0ff)
+    imgui.set_style("default", "background_color", 0x00222bff)
+end
+
+
 --[[
 Example:
 
