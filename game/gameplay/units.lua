@@ -30,7 +30,7 @@ function Unit:render() end
 ---@param damage integer
 ---@param attacker Unit
 function Unit:take_damage(damage, attacker)
-    self.hp = self.hp - damage
+    self.hp = math.max(self.hp - damage, 0)
     if self.hp <= 0 then
         self.alive = false
     end
