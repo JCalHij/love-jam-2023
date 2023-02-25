@@ -165,6 +165,7 @@ function KnightMovingState:update(dt)
     if not target then
         self.knight.state = KnightIdleState(self.knight)
         self:destroy()
+        return
     end
 
     -- Check for collision with target
