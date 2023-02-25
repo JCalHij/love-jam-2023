@@ -1,5 +1,4 @@
 ---@class UnitDef
----@field position Vec2
 ---@field hit_points integer
 ---@field attack_damage integer
 ---@field attack_speed number
@@ -12,10 +11,11 @@ Unit = Object:extend()
 
 
 ---@param room GameplayRoom
+---@param position Vec2
 ---@param unitDef UnitDef
-function Unit:new(room, unitDef)
+function Unit:new(room, position, unitDef)
     self.room = room
-    self.pos = unitDef.position
+    self.pos = position
     self.hp = unitDef.hit_points
     self.max_hp = unitDef.hit_points
     self.attack_damage = unitDef.attack_damage
@@ -39,6 +39,57 @@ end
 function Unit:distance_to(other)
     return (other.pos - self.pos):len()
 end
+
+
+
+---------------------------------------------------------------------------------
+
+
+---@type {[string]: UnitDef}
+local BaseUnitStats = {
+    Knight = {
+        hit_points = 1,
+        move_speed = 60,
+        attack_damage = 1,
+        attack_speed = 1.0,
+        collider_radius = 5,
+    },
+    Princess = {
+        hit_points = 1,
+        move_speed = 0,
+        attack_damage = 0,
+        attack_speed = 0.0,
+        collider_radius = 5,
+    },
+    MagicShield = {
+        hit_points = 6,
+        move_speed = 0,
+        attack_damage = 0,
+        attack_speed = 0.0,
+        collider_radius = 24,
+    },
+    NormalZombie = {
+        hit_points = 2,
+        move_speed = 15,
+        attack_damage = 1,
+        attack_speed = 1.6,
+        collider_radius = 8,
+    },
+    FastZombie = {
+        hit_points = 2,
+        move_speed = 25,
+        attack_damage = 1,
+        attack_speed = 1.0,
+        collider_radius = 5,
+    },
+    FatZombie = {
+        hit_points = 5,
+        move_speed = 10,
+        attack_damage = 3,
+        attack_speed = 2.0,
+        collider_radius = 10,
+    },
+}
 
 
 
@@ -140,7 +191,7 @@ end
 ---@param knight Knight
 function KnightAttackingState:new(knight)
     self.knight = knight
-    self.attack_timer = knight:get_attack_speed()/2
+    self.attack_timer = knight:get_attack_speed()
 end
 
 function KnightAttackingState:update(dt)
@@ -212,16 +263,7 @@ Knight = Unit:extend()
 ---@param room GameplayRoom
 ---@param position Vec2
 function Knight:new(room, position)
-    ---@type UnitDef
-    local BaseKnightDef = {
-        position = position,
-        hit_points = 1,
-        move_speed = 60,
-        attack_damage = 1,
-        attack_speed = 1.0,
-        collider_radius = 5,
-    }
-    Knight.super.new(self, room, BaseKnightDef)
+    Knight.super.new(self, room, position, BaseUnitStats.Knight)
     self.modifiers = {
         -- Attack damage
         attack_damage_num_upgrades = 0,
@@ -312,16 +354,7 @@ Princess = Unit:extend()
 ---@param room GameplayRoom
 ---@param position Vec2
 function Princess:new(room, position)
-    ---@type UnitDef
-    local BasePrincessDef = {
-        position = position,
-        hit_points = 1,
-        move_speed = 0,
-        attack_damage = 0,
-        attack_speed = 0.0,
-        collider_radius = 5,
-    }
-    Princess.super.new(self, room, BasePrincessDef)
+    Princess.super.new(self, room, position, BaseUnitStats.Princess)
     self.dead = false ---@type boolean Different than "alive" property, signals that the princess has been attacked and the game is done
 
     self.w = 16
@@ -483,9 +516,10 @@ EnemyZombieBase = Unit:extend()
 
 
 ---@param room GameplayRoom
+---@param position Vec2
 ---@param definition UnitDef
-function EnemyZombieBase:new(room, definition)
-    EnemyZombieBase.super.new(self, room, definition)
+function EnemyZombieBase:new(room, position, definition)
+    EnemyZombieBase.super.new(self, room, position, definition)
 
     self.state = ZombieMovingState(self)
     self.target = nil  ---@type Unit
@@ -518,16 +552,7 @@ NormalZombie = EnemyZombieBase:extend()
 ---@param room GameplayRoom
 ---@param position Vec2
 function NormalZombie:new(room, position)
-    ---@type UnitDef
-    local BaseNormalZombieDef = {
-        position = position,
-        hit_points = 3,
-        move_speed = 10,
-        attack_damage = 1,
-        attack_speed = 2.0,
-        collider_radius = 8,
-    }
-    NormalZombie.super.new(self, room, BaseNormalZombieDef)
+    NormalZombie.super.new(self, room, position, BaseUnitStats.NormalZombie)
     self.w = 16
     self.h = 16
     local QuadDef = {
@@ -550,16 +575,7 @@ FastZombie = EnemyZombieBase:extend()
 ---@param room GameplayRoom
 ---@param position Vec2
 function FastZombie:new(room, position)
-    ---@type UnitDef
-    local BaseNormalZombieDef = {
-        position = position,
-        hit_points = 1,
-        move_speed = 20,
-        attack_damage = 1,
-        attack_speed = 2.0,
-        collider_radius = 5,
-    }
-    FastZombie.super.new(self, room, BaseNormalZombieDef)
+    FastZombie.super.new(self, room, position, BaseUnitStats.FastZombie)
     self.w = 16
     self.h = 16
     local QuadDef = {
@@ -582,16 +598,7 @@ FatZombie = EnemyZombieBase:extend()
 ---@param room GameplayRoom
 ---@param position Vec2
 function FatZombie:new(room, position)
-    ---@type UnitDef
-    local BaseNormalZombieDef = {
-        position = position,
-        hit_points = 5,
-        move_speed = 10,
-        attack_damage = 1,
-        attack_speed = 2.0,
-        collider_radius = 10,
-    }
-    FatZombie.super.new(self, room, BaseNormalZombieDef)
+    FatZombie.super.new(self, room, position, BaseUnitStats.FatZombie)
     self.w = 16
     self.h = 16
     local QuadDef = {
@@ -618,16 +625,7 @@ MagicShield = Unit:extend()
 ---@param room GameplayRoom
 ---@param position Vec2
 function MagicShield:new(room, position)
-    ---@type UnitDef
-    local BaseMagicShieldDef = {
-        position = position,
-        hit_points = 10,
-        move_speed = 0,
-        attack_damage = 0,
-        attack_speed = 0.0,
-        collider_radius = 24,
-    }
-    MagicShield.super.new(self, room, BaseMagicShieldDef)
+    MagicShield.super.new(self, room, position, BaseUnitStats.MagicShield)
 
     self.modifiers = {
         -- Max HP
