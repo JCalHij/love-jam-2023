@@ -32,13 +32,63 @@ function GameplayRoom:new(app)
     self.waves = {
         -- Level 1
         {
-            { class =  NormalZombie, amount = 4 },
+            { class =  NormalZombie, amount = 2 },
+            { class =  FastZombie, amount = 0 },
+            { class =  FatZombie, amount = 0 },
         },
         -- Level 2
         {
-            { class =  NormalZombie, amount = 1 },
+            { class =  NormalZombie, amount = 3 },
             { class =  FastZombie, amount = 1 },
+            { class =  FatZombie, amount = 0 },
+        },
+        -- Level 3
+        {
+            { class =  NormalZombie, amount = 3 },
+            { class =  FastZombie, amount = 0 },
             { class =  FatZombie, amount = 1 },
+        },
+        -- Level 4
+        {
+            { class =  NormalZombie, amount = 2 },
+            { class =  FastZombie, amount = 2 },
+            { class =  FatZombie, amount = 2 },
+        },
+        -- Level 5
+        {
+            { class =  NormalZombie, amount = 3 },
+            { class =  FastZombie, amount = 2 },
+            { class =  FatZombie, amount = 3 },
+        },
+        -- Level 6
+        {
+            { class =  NormalZombie, amount = 2 },
+            { class =  FastZombie, amount = 4 },
+            { class =  FatZombie, amount = 4 },
+        },
+        -- Level 7
+        {
+            { class =  NormalZombie, amount = 0 },
+            { class =  FastZombie, amount = 5 },
+            { class =  FatZombie, amount = 5 },
+        },
+        -- Level 8
+        {
+            { class =  NormalZombie, amount = 0 },
+            { class =  FastZombie, amount = 15 },
+            { class =  FatZombie, amount = 0 },
+        },
+        -- Level 9
+        {
+            { class =  NormalZombie, amount = 0 },
+            { class =  FastZombie, amount = 10 },
+            { class =  FatZombie, amount = 10 },
+        },
+        -- Level 10
+        {
+            { class =  NormalZombie, amount = 20 },
+            { class =  FastZombie, amount = 20 },
+            { class =  FatZombie, amount = 20 },
         },
     }
     self.current_wave = 1
