@@ -86,9 +86,9 @@ function GameplayRoom:new(app)
         },
         -- Level 10
         {
-            { class =  NormalZombie, amount = 20 },
-            { class =  FastZombie, amount = 20 },
-            { class =  FatZombie, amount = 20 },
+            { class =  NormalZombie, amount = 8 },
+            { class =  FastZombie, amount = 8 },
+            { class =  FatZombie, amount = 8 },
         },
     }
     self.current_wave = 1
