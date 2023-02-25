@@ -658,6 +658,18 @@ end
 
 function MagicShield:update(dt)
     self.ignore_collisions = self.hp <= 0
+    -- Shield color
+    do
+        local hp_percentage = self.hp / self:get_max_hp()
+
+        if hp_percentage >= 0.75 then
+            self.color = self.colors.high_hp
+        elseif hp_percentage >= 0.33 then
+            self.color = self.colors.medium_hp
+        else
+            self.color = self.colors.low_hp
+        end
+    end
 end
 
 function MagicShield:render()
@@ -673,18 +685,6 @@ end
 ---@param attacker Unit
 function MagicShield:take_damage(damage, attacker)
     MagicShield.super.take_damage(self, damage, attacker)
-
-    do
-        local hp_percentage = self.hp / self:get_max_hp()
-
-        if hp_percentage >= 0.75 then
-            self.color = self.colors.high_hp
-        elseif hp_percentage >= 0.33 then
-            self.color = self.colors.medium_hp
-        else
-            self.color = self.colors.low_hp
-        end
-    end
 
     if not self.alive then
         -- The magic shield always stays alive (in game memory), but it will ignore collisions so long as its HP <= 0
