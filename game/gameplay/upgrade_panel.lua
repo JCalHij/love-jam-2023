@@ -2,11 +2,11 @@
 UpgradePanel = Object:extend()
 
 local UpgradeCosts = {
-    AttackDamage = {2, 4, 6},
-    AttackSpeed = {1, 1, 1, 2, 2, 2, 3, 3, 3},
-    MoveSpeed = {1, 1, 1, 1, 1, 2, 2, 2, 3},
-    HpRecovery = 5,
-    MagicShieldMaxHp = {3, 3, 3, 3, 3},
+    AttackDamage = {100, 250},
+    AttackSpeed = {10, 10, 10, 20, 20, 20, 30, 30, 30},
+    MoveSpeed = {10, 15, 20, 25, 30, 35, 40, 45, 50},
+    HpRecovery = 15,
+    MagicShieldMaxHp = {30, 40, 50, 60, 70},
 }
 
 
