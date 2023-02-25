@@ -23,6 +23,7 @@ function Unit:new(room, unitDef)
     self.move_speed = unitDef.move_speed
     self.alive = true
     self.collider_radius = unitDef.collider_radius
+    self.ignore_collisions = false
 end
 function Unit:update(dt) end
 function Unit:render() end
@@ -381,6 +382,10 @@ function ZombieMovingState:update(dt)
         if table.ifind(valid_unit_classes, unit:class()) == nil then
             return false
         end
+        -- Target unit can ignore collisions
+        if unit.ignore_collisions then
+            return false
+        end
         -- Collision between target unit and self is required
         local sum_radius = self.zombie.collider_radius + unit.collider_radius
         local delta_pos = unit.pos - self.zombie.pos
@@ -651,10 +656,17 @@ function MagicShield:get_max_hp()
     return self.max_hp + self.modifiers.max_hp_delta*self.modifiers.max_hp_num_upgrades
 end
 
+function MagicShield:update(dt)
+    self.ignore_collisions = self.hp <= 0
+end
+
 function MagicShield:render()
-    SetDrawColor(self.color)
-    love.graphics.draw(g_TextureAtlas, self.quad, math.round(self.pos.x - self.w/2), math.round(self.pos.y - self.h/2))
-    SetDrawColor({1, 1, 1, 1})
+    -- Render only if magic shield is active
+    if self.hp > 0 then
+        SetDrawColor(self.color)
+        love.graphics.draw(g_TextureAtlas, self.quad, math.round(self.pos.x - self.w/2), math.round(self.pos.y - self.h/2))
+        SetDrawColor({1, 1, 1, 1})
+    end
 end
 
 ---@param damage integer
@@ -675,20 +687,23 @@ function MagicShield:take_damage(damage, attacker)
     end
 
     if not self.alive then
+        -- The magic shield always stays alive (in game memory), but it will ignore collisions so long as its HP <= 0
+        self.alive = true
+        self.ignore_collisions = true
         -- If the magic shield gets destroyed, knocks back all enemy units, no matter their distance to the shield
         local enemy_units = self.room:filter_units(function (unit)
             return table.ifind({ NormalZombie }, unit:class()) ~= nil
         end)
 
-        for _, unit in ipairs(enemy_units) do
-            ---@cast unit NormalZombie
+        for _, zombie in ipairs(enemy_units) do
+            ---@cast zombie EnemyZombieBase
             -- Knockback vector and magnitude
-            local knockback_vector = (unit.pos - self.pos):normalizeInplace()
+            local knockback_vector = (zombie.pos - self.pos):normalizeInplace()
             local magnitude = 600
 
-            unit.state:destroy()
-            unit.knockback_vector = magnitude * knockback_vector
-            unit.state = ZombieKnockbackState(unit)
+            zombie.state:destroy()
+            zombie.knockback_vector = magnitude * knockback_vector
+            zombie.state = ZombieKnockbackState(zombie)
         end
     else
         self.room:add_effect(MagicShieldHitEffect(self))
