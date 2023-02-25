@@ -75,14 +75,14 @@ function GameplayRoom:new(app)
         -- Level 8
         {
             { class =  NormalZombie, amount = 0 },
-            { class =  FastZombie, amount = 15 },
+            { class =  FastZombie, amount = 10 },
             { class =  FatZombie, amount = 0 },
         },
         -- Level 9
         {
             { class =  NormalZombie, amount = 0 },
-            { class =  FastZombie, amount = 10 },
-            { class =  FatZombie, amount = 10 },
+            { class =  FastZombie, amount = 7 },
+            { class =  FatZombie, amount = 7 },
         },
         -- Level 10
         {
@@ -148,6 +148,7 @@ function GameplayRoom:new(app)
         self.upgrade_panel:destroy()
         self.upgrade_panel = nil
         -- Go to the next wave
+        self.show_game_ui = true
         self.app.timer:after(2.0, function()
             self:new_wave()
         end)
@@ -290,6 +291,7 @@ function GameplayRoom:game_ui()
     love.graphics.print(string.format("Player points %d", self.player_points), 10, 30)
     love.graphics.print(string.format("Enemies left %d", self.enemies_left), 10, 50)
     love.graphics.print(string.format("Chain %d (Max %d)", self.knight.attack_chain_count, self.max_attack_chain_count), 10, 70)
+    love.graphics.print(string.format("Wave %d / %d", self.current_wave, #self.waves), 10, 90)
 end
 
 
