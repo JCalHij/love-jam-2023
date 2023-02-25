@@ -733,11 +733,13 @@ function EnemySpawner:new(room, wave_data)
 
     -- Deep-copy of depth 1 from wave data, so that we can modify the amounts for each wave without modifying the original data
     for i, wave in ipairs(wave_data) do
-        local copy_wave = {}
-        for k, v in pairs(wave) do
-            copy_wave[k] = v
+        if wave.amount > 0 then
+            local copy_wave = {}
+            for k, v in pairs(wave) do
+                copy_wave[k] = v
+            end
+            table.insert(self.wave_data, copy_wave)
         end
-        table.insert(self.wave_data, copy_wave)
     end
 end
 
