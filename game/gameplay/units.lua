@@ -79,7 +79,7 @@ local BaseUnitStats = {
         hit_points = 2,
         move_speed = 25,
         attack_damage = 1,
-        attack_speed = 1.0,
+        attack_speed = 1.1,
         collider_radius = 5,
     },
     FatZombie = {
