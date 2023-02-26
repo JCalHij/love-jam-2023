@@ -32,6 +32,12 @@ function love.load(args, unfiltered_args)
 			love.audio.newSource("content/zombie_attack3.wav", "static"),
 			love.audio.newSource("content/zombie_attack4.wav", "static"),
 		},
+		player_attack = {
+			love.audio.newSource("content/attack1.wav", "static"),
+			love.audio.newSource("content/attack2.wav", "static"),
+			love.audio.newSource("content/attack3.wav", "static"),
+			love.audio.newSource("content/attack4.wav", "static"),
+		},
 		zombie_spawn = {
 			love.audio.newSource("content/zombie_spawn1.wav", "static"),
 			love.audio.newSource("content/zombie_spawn2.wav", "static"),

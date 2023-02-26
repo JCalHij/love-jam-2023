@@ -210,6 +210,7 @@ function KnightAttackingState:update(dt)
         -- Reset timer
         self.attack_timer = self.attack_timer + self.knight:get_attack_speed()
         -- Attack
+        table.random(g_SoundEffects.player_attack):play()
         target:take_damage(self.knight:get_attack_damage(), self.knight)
         self.knight.room:add_effect(KnightAttackEffect(target))
         if not target.alive then

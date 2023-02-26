@@ -528,7 +528,7 @@
       "BoardIndex": 0,
       "Position.X": 528,
       "Position.Y": 480,
-      "Checkbox.Checked": false,
+      "Checkbox.Checked": true,
       "Progression.Current": 0,
       "Progression.Max": 0,
       "Description": "Player attack",
