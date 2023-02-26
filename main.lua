@@ -46,6 +46,7 @@ function love.load(args, unfiltered_args)
 			love.audio.newSource("content/zombie_spawn5.wav", "static"),
 		},
 		shield_explosion = love.audio.newSource("content/shield_explosion.wav", "static"),
+		princess_death = love.audio.newSource("content/princess_death.wav", "static"),
 	}
 
 	g_Music.main:setLooping(true)

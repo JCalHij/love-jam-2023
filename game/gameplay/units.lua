@@ -376,6 +376,7 @@ end
 function Princess:take_damage(damage, attacker)
     -- The Princess unit does not take damage, but it signals the end of the game (lost condition)
     if not self.dead then
+        g_SoundEffects.princess_death:play()
         self.dead = true
         self.room.event_layer:notify(PlayerLostEvent())
     end
