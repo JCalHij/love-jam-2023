@@ -25,6 +25,23 @@ function love.load(args, unfiltered_args)
 		main = love.audio.newSource("content/main_song.wav", "static")
 	}
 
+	g_SoundEffects = {
+		zombie_attack = {
+			love.audio.newSource("content/zombie_attack1.wav", "static"),
+			love.audio.newSource("content/zombie_attack2.wav", "static"),
+			love.audio.newSource("content/zombie_attack3.wav", "static"),
+			love.audio.newSource("content/zombie_attack4.wav", "static"),
+		},
+		zombie_spawn = {
+			love.audio.newSource("content/zombie_spawn1.wav", "static"),
+			love.audio.newSource("content/zombie_spawn2.wav", "static"),
+			love.audio.newSource("content/zombie_spawn3.wav", "static"),
+			love.audio.newSource("content/zombie_spawn4.wav", "static"),
+			love.audio.newSource("content/zombie_spawn5.wav", "static"),
+		},
+		shield_explosion = love.audio.newSource("content/shield_explosion.wav", "static"),
+	}
+
 	g_Music.main:setLooping(true)
 	g_Music.main:setVolume(0.8)
 

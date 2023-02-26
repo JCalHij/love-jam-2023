@@ -467,6 +467,7 @@ function ZombieAttackingState:update(dt)
     self.attack_timer = self.attack_timer - dt
     if self.attack_timer <= 0 then
         printf("Zombie attacking!")
+        table.random(g_SoundEffects.zombie_attack):play()
         -- Reset timer
         self.attack_timer = self.attack_timer + self.zombie.attack_speed
         -- Attack
@@ -525,6 +526,8 @@ function EnemyZombieBase:new(room, position, definition)
     self.state = ZombieMovingState(self)
     self.target = nil  ---@type Unit
     self.knockback_vector = Vector2(0, 0)
+
+    table.random(g_SoundEffects.zombie_spawn):play()
 end
 
 function EnemyZombieBase:update(dt)
@@ -686,6 +689,7 @@ function MagicShield:take_damage(damage, attacker)
     MagicShield.super.take_damage(self, damage, attacker)
 
     if not self.alive then
+        g_SoundEffects.shield_explosion:play()
         -- The magic shield always stays alive (in game memory), but it will ignore collisions so long as its HP <= 0
         self.alive = true
         self.ignore_collisions = true
