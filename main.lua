@@ -21,6 +21,15 @@ function love.load(args, unfiltered_args)
 
 	g_TextureAtlas = love.graphics.newImage("content/texture_atlas.png")
 
+	g_Music = {
+		main = love.audio.newSource("content/main_song.wav", "static")
+	}
+
+	g_Music.main:setLooping(true)
+	g_Music.main:setVolume(0.8)
+
+	g_Music.main:play()
+
 	g_GameApp = GameApp()
 end
 
