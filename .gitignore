@@ -1,2 +1,3 @@
 *.plan_bak*
 *.love
+build/
