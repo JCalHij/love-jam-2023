@@ -77,3 +77,15 @@ I finally finished the prototype. It is really rough, no textures whatsoever, no
 I created a lot of sprites and a lot of cool things, like the magic shield effect of being hit. That was really fun. I also played around a bit with the colors of the magic shield, so that the princess could be properly be seen.
 
 I created as well the main menu and a simple text-based tutorial. The game's minimum version is almost finished. I think we need sound effects, background music, a new font, credits and game content and balancing. Also, an explosion effect for the shield would be nice, as well as a zombie attack effect. I would also like to improve the game title image, both the background and the name, and how the upgrade menu looks, at least color-wise.
+
+
+## Day 8 - Saturday 25/02/2023
+
+Fixed a lot of bugs and created some content for the game (waves). I also played the game a lot in order to balance player points, enemy types and amount on each wave and upgrade costs. I think I did an OK job on that.
+
+I am postponing the sounds to the end, because I do not actually feel like creating sounds and music for the game, but I will try to do something tomorrow.
+
+
+## Day 9 - Sunday 26/02/2023
+
+
